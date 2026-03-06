@@ -6,7 +6,7 @@
 
 `SEMESTRE: 7º`
 
-Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo desenvolvido.
+Este projeto propõe o desenvolvimento de um sistema de detecção de ameaças cibernéticas baseado em aprendizado de máquina, capaz de analisar o tráfego de rede e classificar automaticamente conexões como legítimas ou maliciosas. A iniciativa se insere no contexto da segurança cibernética aplicada, área de atuação crescente tanto no mercado profissional quanto na pesquisa acadêmica. O objetivo é desenvolver um modelo de Aprendizado Supervisionado para classificação automática de ameaças em tráfego de rede, aplicando um pipeline completo de ciência de dados — da preparação dos dados até a avaliação dos modelos.
 
 ## Integrantes
 
@@ -19,7 +19,7 @@ Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo de
 
 ## Orientador
 
-* Nome completo do professor 1
+* Leonardo de Melo João
 
 # Planejamento
 
