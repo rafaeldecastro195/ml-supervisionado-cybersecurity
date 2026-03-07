@@ -18,29 +18,19 @@ Este projeto propõe o desenvolvimento de um sistema de detecção de ameaças c
 
 ## Problema
 
-Nesta seção, você deve apresentar o problema que a sua investigação/experimentação busca resolver. Por exemplo, caso o _dataset_ selecionado, seja um _dataset_ que contenha uma série temporal com o preço de diversas ações da bolsa de valores, o problema pode estar relacionado a dificuldade em saber a melhor hora (hora certa??) de comprar ou então, de executar a venda de uma determinada ação.
+O volume de tráfego de rede gerado por organizações modernas é imenso e cresce a cada ano. Monitorar manualmente cada conexão para identificar possíveis ameaças é humanamente impossível, mesmo para equipes de segurança experientes. Ferramentas tradicionais baseadas em assinaturas (como firewalls e antivírus convencionais) dependem de padrões de ataques já conhecidos, tornando-as ineficazes contra ameaças novas ou variantes de ataques existentes.
 
-Descreva ainda o contexto em que essa aplicação será usada, se houver: empresa parceira, tecnologias etc. Novamente, descreva apenas o que de fato existir, pois ainda não é a hora de apresentar requisitos  detalhados ou projetos.
+O problema central deste projeto é: **como classificar automaticamente o tráfego de rede para identificar se uma conexão representa uma ameaça cibernética — e qual tipo de ataque está ocorrendo — de forma precisa e escalável?**
 
-**Atenção:** Nesta etapa, apresente apenas informações reais e já confirmadas. Não antecipe requisitos técnicos detalhados, funcionalidades específicas ou desenhos de projeto — essa parte será desenvolvida posteriormente.
+Ataques como brute-force, port-scan, SQL injection, XSS, DDoS, command injection, credential stuffing e comunicações C2 (Command & Control) possuem características comportamentais distintas que se manifestam em variáveis como volume de bytes transferidos, portas utilizadas, protocolo de comunicação, horário da conexão e origem do tráfego. A combinação dessas variáveis, analisada por modelos de aprendizado de máquina, permite identificar padrões que seriam imperceptíveis a um analista humano em tempo real.
 
-> **Links Úteis**:
-> - [Objetivos, Problema de pesquisa e Justificativa](https://medium.com/@versioparole/objetivos-problema-de-pesquisa-e-justificativa-c98c8233b9c3)
-> - [Matriz Certezas, Suposições e Dúvidas](https://medium.com/educa%C3%A7%C3%A3o-fora-da-caixa/matriz-certezas-suposi%C3%A7%C3%B5es-e-d%C3%BAvidas-fa2263633655)
-> - [Brainstorming](https://www.euax.com.br/2018/09/brainstorming/)
+O contexto de aplicação é diretamente ligado a ambientes corporativos de segurança da informação, onde ferramentas como SIEM (Security Information and Event Management) e IDS (Intrusion Detection Systems) são utilizadas para monitoramento contínuo de redes. O modelo desenvolvido neste projeto simula a camada de inteligência que alimentaria esse tipo de sistema.
 
-## Questão de pesquisa
+## Questão de Pesquisa
 
-A questão de pesquisa é o ponto de partida e a base orientadora de todo o trabalho a ser desenvolvido. Ela deve estar diretamente alinhada ao problema identificado e expressar, de forma clara, o que se deseja investigar ou comprovar.
+*É possível, utilizando técnicas de aprendizado de máquina aplicadas a dados de tráfego de rede, classificar automaticamente conexões como legítimas ou maliciosas com alta taxa de detecção e baixa taxa de falsos alarmes, identificando ainda o tipo específico de ameaça presente?*
 
-O papel da questão de pesquisa é guiar todas as etapas do projeto — desde a definição da metodologia até a análise e interpretação dos resultados. Ao término da investigação ou experimentação, o objetivo é que seja possível responder a essa questão de forma fundamentada, utilizando evidências obtidas ao longo do processo.
-
-**Dica:** Formule a questão de pesquisa de forma específica e objetiva, evitando perguntas muito amplas ou genéricas. Pergunte-se: "Ao final do trabalho, minha pesquisa terá condições de responder claramente a essa pergunta?"
-
-> **Links Úteis**:
-> - [Questão de pesquisa](https://www.enago.com.br/academy/how-to-develop-good-research-question-types-examples/)
-> - [Problema de pesquisa](https://blog.even3.com.br/problema-de-pesquisa/)
-
+Ao final do projeto, espera-se que o modelo treinado seja capaz de responder a essa pergunta.
 ## Objetivos preliminares
 
 Objetivo geral: experimentar e comparar técnicas de desenvolvimento de modelos de aprendizado supervisionado de máquina para classificação e detecção automática de ameaças cibernéticas em tráfego de rede, identificando qual abordagem oferece o melhor equilíbrio entre taxas de detecção e taxas de falsos positivos.
