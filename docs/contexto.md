@@ -95,41 +95,108 @@ O objetivo aqui não é definir clientes específicos ou papéis exatos dentro d
 > - [Público-alvo: o que é, tipos, como definir seu público e exemplos](https://klickpages.com.br/blog/publico-alvo-o-que-e/)
 > - [Qual a diferença entre público-alvo e persona?](https://rockcontent.com/blog/diferenca-publico-alvo-e-persona/)
 
-## Estado da arte
+## Estado da Arte
 
-Nesta seção, descreva abordagens da literatura que tratam problemas semelhantes ao seu. Seu objetivo é documentar métodos, dados, métricas e resultados.
+### Trabalho 1
 
-### O que levantar (mínimo 5 trabalhos)
-Para **cada estudo encontrado** aderente à temática do grupo, registre de forma objetiva:
-* Problema e contexto: que problema o trabalho buscou resolver e em qual domínio/cenário foi aplicado.
-* Dados (dataset): origem, tamanho, período, variáveis/atributos, pré-processamentos relevantes (faltantes, balanceamento, normalização).
-* Abordagem/algoritmos: algoritmos utilizados e parâmetros principais (quando informados).
-* Métricas de avaliação: quais e por quê (ex.: Acurácia, F1, AUC, RMSE, MAE, etc.).
-* Resultados: principais números, comparações internas, limitações citadas e conclusões.
+**Título:** *Machine Learning for Cybersecurity: Web Attack Detection (Brute Force, XSS, SQL Injection)*  
+**Publicação:** InPrime: Indonesian Journal of Pure and Applied Mathematics, v. 7, n. 1, 2025  
+**URL:** https://journal.uinjkt.ac.id/index.php/inprime/article/view/41025
 
-* Texto-síntese crítico (2–4 parágrafos) respondendo:
-- O que os estudos concordam? Onde divergem?
-- Quais lacunas permanecem (dados, métricas, cenários, limitações técnicas/éticas)?
-- Como seu projeto se alinha aos estudos identificados?
+**Problema e contexto:** detecção de ataques web — especificamente Brute Force, XSS e SQL Injection — em tráfego de rede, contexto diretamente alinhado ao dataset deste projeto.
 
-**Dica:** Prefira artigos dos últimos 5 anos ou referências clássicas indispensáveis.
+**Dataset:** os autores utilizaram os datasets CICIDS2017 e CSE-CICIDS2018, contendo tráfego de rede rotulado em quatro categorias: Benign, Brute Force, XSS e SQL Injection. Para tratar o desbalanceamento, aplicaram SMOTE em conjunto com Análise de Componentes Principais (PCA).
 
-### Ferramentas inteligentes permitidas
-Você pode utilizar: Perplexity, SciSpace, Elicit, Research Rabbit, Litmaps.
-Use-as para descoberta, organização e triagem de literatura. 
+**Abordagens de ML:** os modelos avaliados incluíram Random Forest, KNN e algoritmos de boosting como XGBoost e LightGBM, com validação por K-Fold Cross Validation. A avaliação de modelos foi feita usando técnicas como K-Fold Cross Validation, onde tanto Random Forest quanto KNN demonstraram estabilidade, com pequenas flutuações de acurácia entre os diferentes subconjuntos de dados.
 
-**Atenção:** 
-* Sempre acesse a fonte original (PDF/artigo) antes de citar; verifique números e conclusões.
-* Registre DOI/URL oficial e dados bibliográficos completos.
-* Evite “alucinações” das ferramentas: desconfie de referências sem DOI ou que você não consiga localizar oficialmente.
-* Use as ferramentas inteligentes para mapear redes de citação (Research Rabbit), mapas de tópicos (Litmaps), filtrar por período e gerar resumos iniciais (Perplexity/SciSpace/Elicit).
-* Leia os trabalhos mais promissores e descarte estudos fora de escopo.
+**Métricas:** Accuracy, Precision, Recall, F1-Score e ROC-AUC.
 
-> **Links Úteis**:
-> - [Google Scholar](https://scholar.google.com/)
-> - [IEEE Xplore](https://ieeexplore.ieee.org/Xplore/home.jsp)
-> - [Science Direct](https://www.sciencedirect.com/)
-> - [ACM Digital Library](https://dl.acm.org/)
+**Principais resultados:** Random Forest e KNN apresentaram resultados estáveis. XGBoost e LightGBM apresentaram bom desempenho geral, com leve variação indicando necessidade de ajuste fino de hiperparâmetros. O estudo identificou que o tratamento do desbalanceamento com SMOTE foi essencial para resultados confiáveis.
+
+---
+
+### Trabalho 2
+
+**Título:** *Network Intrusion Detection System Using XGBoost and Random Forest Algorithms*  
+**Autores:** Onyebueke, A. E.; David, A. A.; Munu, S.  
+**Publicação:** Asian Journal of Pure and Applied Mathematics, v. 5, n. 1, p. 321–335, 2023  
+**URL:** https://jofmath.com/index.php/AJPAM/article/view/18
+
+**Problema e contexto:** desenvolvimento de um sistema de detecção de intrusão em redes utilizando XGBoost e Random Forest, com foco em identificar anomalias e acessos não autorizados.
+
+**Dataset:** o estudo utilizou os datasets UNSW-NB15 2017 e KDD, disponíveis no Kaggle, com aplicação de normalização, seleção de features e SMOTE para balanceamento.
+
+**Abordagens de ML:** XGBoost e Random Forest, com pré-processamento de normalização, seleção de features e SMOTE.
+
+**Métricas:** Accuracy, Precision, Recall e F1-Score.
+
+**Principais resultados:** o XGBoost obteve 100% de acurácia, precisão e recall no dataset UNSW-NB15, com F1-Score perfeito. No dataset KDD, ambos os algoritmos atingiram acurácia próxima de perfeição — 99% para XGBoost e 98% para Random Forest — após as etapas de pré-processamento e balanceamento com SMOTE.
+
+---
+
+### Trabalho 3
+
+**Título:** *The Improved Network Intrusion Detection Techniques Using the Feature Engineering Approach with Boosting Classifiers*  
+**Publicação:** Mathematics (MDPI), v. 12, n. 24, 2024  
+**URL:** https://www.mdpi.com/2227-7390/12/24/3909
+
+**Problema e contexto:** melhoria na detecção de intrusões em redes por meio de engenharia de features avançada combinada com classificadores de boosting.
+
+**Dataset:** dataset de detecção de intrusão em redes com registros de tráfego normal e anômalo, com 70% para treino e 30% para teste.
+
+**Abordagens de ML:** o estudo incorporou classificadores convencionais (Naive Bayes, Regressão Logística e SVC) e classificadores de boosting (CatBoost, LightGBM, HistGradientBoosting e XGBoost), com validação por 10-Fold Cross Validation e avaliação por múltiplas métricas incluindo Accuracy, F1-Score, AUC-ROC e Precision.
+
+**Métricas:** Accuracy, F1-Score, AUC-ROC, Precision e Recall.
+
+**Principais resultados:** o modelo XGBoost produziu o melhor desempenho geral, com valores médios de 99,54% de acurácia, 99,53% de precisão, 99,54% de recall e F1-Score de 99,53%. Todos os classificadores de boosting obtiveram valor AUC perfeito igual a 1.
+
+---
+
+### Trabalho 4
+
+**Título:** *Deep Learning-Based Intrusion Detection for IoT Networks: A Scalable and Efficient Approach*  
+**Publicação:** Journal on Information Security (Springer Nature), 2025  
+**URL:** https://link.springer.com/article/10.1186/s13635-025-00202-w
+
+**Problema e contexto:** detecção de intrusão em redes IoT utilizando modelos de deep learning, contexto que compartilha os mesmos tipos de ataque do dataset deste projeto.
+
+**Dataset:** o estudo utilizou o dataset CIC IoT-DIAD 2024, contendo tráfego de rede de 105 dispositivos IoT sob condições benignas e de ataque, cobrindo 33 tipos diferentes de ataques categorizados em sete classes principais: DDoS, DoS, Brute Force, Spoofing, ataques web, SQL Injection e ataques Mirai. O dataset possui 84 features distintas capturando características de fluxo de rede.
+
+**Abordagens de ML:** modelos de deep learning como CNNs 1D, redes LSTM, RNNs e MLPs para detecção de ameaças em tempo real.
+
+**Métricas:** Accuracy, Precision, Recall, F1-Score e AUC-ROC.
+
+**Principais resultados:** os modelos de deep learning superaram abordagens tradicionais de ML para dados sequenciais de tráfego IoT. LSTM e CNN 1D apresentaram os melhores resultados para captura de padrões temporais em fluxos de rede. O estudo evidenciou que a arquitetura do modelo deve ser escolhida considerando a natureza sequencial dos dados de rede.
+
+---
+
+### Trabalho 5
+
+**Título:** *Top-K Feature Selection for IoT Intrusion Detection: Contributions of XGBoost, LightGBM, and Random Forest*  
+**Publicação:** Future Internet (MDPI), v. 17, n. 11, 2025  
+**URL:** https://www.mdpi.com/1999-5903/17/11/529
+
+**Problema e contexto:** otimização da detecção de intrusão em redes IoT por meio de seleção de features Top-K combinada com modelos ensemble, abordando o desafio de espaços de features grandes e complexos.
+
+**Dataset:** CICIoMT2024, avaliado com três configurações de features: Top-10, Top-15 e conjunto completo.
+
+**Abordagens de ML:** três algoritmos foram treinados e testados: XGBoost, LightGBM e Random Forest, cada um avaliado nas três configurações de features. Além das métricas padrão, foram reportadas a Taxa de Falso Alarme (FAR), Taxa de Falso Positivo (FPR) e Taxa de Detecção (DR).
+
+**Métricas:** Accuracy, Precision, Recall, F1-Score, FAR, FPR e Detection Rate.
+
+**Principais resultados:** o modelo Random Forest apresentou o melhor equilíbrio entre acurácia e eficiência computacional, atingindo 91,7% de acurácia e F1-Score de 93% com o subconjunto Top-10, reduzindo o tempo de processamento em 35%. O estudo demonstrou que a seleção de features não apenas melhora o desempenho, mas também aumenta a interpretabilidade do modelo — relevante para ambientes de segurança onde a explicabilidade das decisões é importante.
+
+---
+
+### Síntese Crítica dos Trabalhos Relacionados
+
+Os cinco estudos analisados apresentam forte convergência em torno de algumas conclusões fundamentais. Em primeiro lugar, todos concordam que **algoritmos de ensemble — especialmente Random Forest e XGBoost — consistentemente superam modelos mais simples** como Regressão Logística e Naive Bayes em tarefas de detecção de intrusão. Em segundo lugar, o **desbalanceamento de classes é unanimemente identificado como o principal desafio técnico** da área, e o SMOTE é a técnica de reamostragem mais amplamente adotada e validada para seu tratamento. Em terceiro lugar, a **engenharia de features** é reconhecida como etapa determinante: a seleção das variáveis mais relevantes melhora tanto o desempenho quanto a eficiência computacional dos modelos.
+
+As principais divergências entre os estudos referem-se à escolha das métricas de avaliação e ao conjunto de dados utilizado. Alguns trabalhos reportam acurácia como métrica principal — o que pode ser enganoso em dados desbalanceados — enquanto outros priorizam F1-Score, Recall e Detection Rate, mais adequados para o contexto de detecção de ataques. Essa inconsistência metodológica dificulta comparações diretas entre estudos.
+
+As lacunas identificadas na literatura incluem: (1) a maioria dos estudos utiliza datasets históricos e bem conhecidos como CICIDS2017 e NSL-KDD, com pouca exploração de datasets mais recentes e diversificados; (2) poucos trabalhos abordam explicitamente o impacto dos falsos positivos para equipes de segurança operacionais; (3) a interpretabilidade dos modelos — saber **por que** uma conexão foi classificada como ataque — ainda é pouco explorada na literatura.
+
+Este projeto se alinha com os estudos identificados ao adotar os mesmos algoritmos consagrados (Regressão Logística como baseline, Random Forest e XGBoost como modelos principais), aplicar SMOTE para tratamento do desbalanceamento e avaliar os modelos com métricas adequadas ao contexto (F1-Score, Recall e ROC-AUC). Diferencia-se ao utilizar um dataset com maior diversidade de tipos de ataque e ao explorar a engenharia de features sobre variáveis temporais e de protocolo, aspectos menos explorados nos trabalhos levantados.
 
 # Descrição do Dataset Selecionado
 
