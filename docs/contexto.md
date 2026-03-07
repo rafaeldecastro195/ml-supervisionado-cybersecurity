@@ -131,16 +131,96 @@ Use-as para descoberta, organização e triagem de literatura.
 > - [Science Direct](https://www.sciencedirect.com/)
 > - [ACM Digital Library](https://dl.acm.org/)
 
-# Descrição do _dataset_ selecionado
+# Descrição do Dataset Selecionado
 
-Nesta seção, apresente uma visão clara e objetiva do dataset selecionado, incluindo:
-* Identificação e origem – Nome, link de acesso, fonte (instituição, repositório, API etc.) e licença de uso.
-* Visão geral – Total de registros e atributos, período coberto e breve contextualização.
-* Atributos – Tabela com nome, descrição, tipo, unidade de medida (se aplicável) e exemplos de valores.
-* Qualidade dos dados – Presença de valores faltantes, inconsistências, duplicatas ou outliers.
+## Identificação e Origem
 
-**Dica:** Seja objetivo, mas inclua detalhes suficientes para que outra pessoa possa entender e reutilizar o conjunto de dados sem buscar informações extras.
+| Atributo | Informação |
+|---|---|
+| **Nome** | Cybersecurity Threat Detection Dataset |
+| **Fonte** | Kaggle — usuário dhrubangtalukdar |
+| **URL** | https://www.kaggle.com/datasets/dhrubangtalukdar/cybersecurity-threat-detection-dataset |
+| **Licença** | Verificar na página do Kaggle |
+| **Formato** | CSV único (cybersecurity.csv) |
+| **Tamanho** | ~2 MB |
 
+## Visão Geral
+
+O dataset contém registros de conexões de rede rotulados entre tráfego benigno e diferentes tipos de ataques cibernéticos. Cada registro representa uma única conexão de rede com informações sobre origem, destino, protocolo, volume de dados transferidos e classificação de segurança.
+
+| Métrica | Valor |
+|---|---|
+| **Total de registros** | 10.000 |
+| **Total de atributos** | 13 colunas |
+| **Tráfego benigno (label = 0)** | 9.600 registros (96%) |
+| **Tráfego malicioso (label = 1)** | 400 registros (4%) |
+| **Valores nulos** | 3.232 (apenas na coluna `url`) |
+| **Duplicatas** | Nenhuma |
+| **Período** | Outubro de 2025 (dado sintético/simulado) |
+
+## Distribuição dos Tipos de Ataque
+
+| Tipo de Ataque | Registros | Descrição |
+|---|---|---|
+| benign | 9.600 | Tráfego legítimo normal |
+| brute-force | 108 | Tentativas repetidas de autenticação |
+| port-scan | 81 | Varredura de portas abertas |
+| sql-injection | 64 | Injeção de comandos SQL maliciosos |
+| xss | 34 | Cross-Site Scripting |
+| credential-stuffing | 28 | Uso de credenciais vazadas |
+| ddos | 27 | Negação de serviço distribuída |
+| command-injection | 26 | Injeção de comandos no sistema |
+| exploit-attempt | 22 | Tentativa de exploração de vulnerabilidades |
+| c2 | 10 | Comunicação com servidor Command & Control |
+
+## Descrição dos Atributos
+
+| Coluna | Tipo | Descrição | Valores Ausentes | Exemplos |
+|---|---|---|---|---|
+| `timestamp` | String (datetime) | Data e hora da conexão. Permite extração de features temporais como hora do dia e dia da semana. | Nenhum | 2025-10-01 00:12:54 |
+| `src_ip` | String | Endereço IP de origem da conexão. Identificador de rede, não utilizado diretamente como feature preditiva. | Nenhum | 188.176.27.165 |
+| `dst_ip` | String | Endereço IP de destino da conexão. | Nenhum | 10.0.0.5 |
+| `src_port` | Inteiro | Porta de origem da conexão. Varia de 21 a 65.524. | Nenhum | 45231 |
+| `dst_port` | Inteiro | Porta de destino da conexão. Portas como 80 (HTTP), 443 (HTTPS) e 22 (SSH) são comuns. | Nenhum | 443 |
+| `protocol` | String | Protocolo de comunicação utilizado: TCP, UDP ou ICMP. | Nenhum | TCP (77,65%), UDP (19,1%), ICMP (3,25%) |
+| `bytes_sent` | Inteiro | Volume de bytes enviados na conexão. Varia de 17 a 139.170.400. | Nenhum | 22.000 |
+| `bytes_received` | Inteiro | Volume de bytes recebidos na conexão. Varia de 3 a 291.483.000. | Nenhum | 37.473 |
+| `user_agent` | String | Agente de usuário HTTP da conexão. Indica o navegador ou ferramenta utilizada. | Nenhum | Mozilla/5.0 (Windows NT 10.0...) |
+| `url` | String | URL acessada na conexão. Ausente para conexões UDP e ICMP que não geram requisições HTTP. | **3.232 (32,32%)** | https://webmail.corp/login |
+| `is_internal_traffic` | Booleano | Indica se a conexão é interna à rede (True) ou externa (False). | Nenhum | False (84,66%), True (15,34%) |
+| `label` | Inteiro (0 ou 1) | **Variável-alvo binária.** 0 = tráfego legítimo, 1 = ataque cibernético. | Nenhum | 0, 1 |
+| `attack_type` | String | **Variável-alvo multiclasse.** Especifica o tipo de ataque ou "benign". Usada para análise, não como feature preditiva. | Nenhum | benign, brute-force, ddos... |
+
+## Qualidade dos Dados
+
+**Pontos positivos:**
+- Nenhuma duplicata identificada.
+- Apenas uma coluna com valores ausentes (`url`), com justificativa técnica clara, já que algumas conexões não geram URL.
+- Variáveis-alvo, label e attack_type, bem definida em duas granularidades (binária e multiclasse).
+- Distribuição de protocolos realista (TCP dominante, seguido de UDP e ICMP).
+
+**Desafios identificados e tratamentos planejados:**
+
+| Problema | Descrição | Tratamento Planejado |
+|---|---|---|
+| **Valores nulos em `url`** | 3.232 registros sem URL (conexões UDP/ICMP) | Substituir por `'sem_url'` — ausência de URL é informação relevante |
+| **Colunas textuais não numéricas** | `src_ip`, `dst_ip`, `user_agent`, `url` | Tranformar os valores correspondentes em features numéricas |
+| **`timestamp` não numérico** | Data/hora em formato string | Extração de `hora` e `dia_semana` como features numéricas |
+| **`is_internal_traffic` booleano** | True/False | Conversão para 1/0 |
+| **`attack_type` como feature** | Seria vazamento de informação (data leakage) | Utilizada apenas para análise exploratória, removida do modelo |
+
+## Critérios de Qualidade Atendidos
+
+| Critério (orientações do projeto) | Avaliação |
+|---|---|
+| **Representatividade** | Cobre 9 tipos de ataque relevantes e modernos |
+| **Qualidade dos dados** | Sem duplicatas; único problema de nulos tem solução clara |
+| **Contexto e significado** | Todas as colunas têm significado técnico claro em segurança de redes |
+| **Ética e privacidade** | IPs e dados de usuário são sintéticos/simulados; sem dados pessoais reais |
+| **Atualidade e relevância** | Tipos de ataque modernos (C2, credential-stuffing, XSS) |
+| **Tamanho do dataset** | 10.000 registros — atende ao mínimo exigido |
+
+---
 # Canvas analítico
 
 Nesta seção, você deverá estruturar e preencher o seu Canvas Analítico, que tem como objetivo registrar a organização das ideias e apresentar o modelo de negócio do projeto.
