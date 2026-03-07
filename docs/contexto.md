@@ -1,6 +1,20 @@
+# Detecção de Ameaças Cibernéticas com Aprendizado de Máquina
+
+---
+
 # Introdução
 
-Texto descritivo introdutório apresentando a visão geral do projeto a ser desenvolvido considerando o contexto em que ele se insere, os objetivos gerais, a justificativa e o público-alvo do projeto.
+A segurança da informação tornou-se um dos maiores desafios da era digital. Com o crescimento exponencial da conectividade e da dependência de sistemas digitais por parte de empresas, governos e cidadãos, os ataques cibernéticos tornaram-se mais frequentes, sofisticados e prejudiciais. Organizações de todos os portes são alvos constantes de ameaças como ataques de força bruta, injeção de SQL, varreduras de portas, negação de serviço (DDoS) e comunicações com servidores de comando e controle (C2).
+
+Este projeto propõe o desenvolvimento de um sistema de detecção de ameaças cibernéticas baseado em aprendizado de máquina, capaz de analisar o tráfego de rede e classificar automaticamente conexões como legítimas ou maliciosas. A iniciativa se insere no contexto da segurança cibernética aplicada, área de atuação crescente tanto no mercado profissional quanto na pesquisa acadêmica.
+
+**Objetivos gerais:** desenvolver um modelos de Aprendizado Supervisionado para classificação automática de ameaças em tráfego de rede, aplicando um pipeline completo de ciência de dados — da preparação dos dados até a avaliação dos modelos.
+
+**Justificativa:** o avanço das ameaças cibernéticas torna inviável a detecção exclusivamente manual. Sistemas baseados em IA conseguem identificar padrões complexos em grandes volumes de dados em tempo real, complementando e potencializando as capacidades das equipes de segurança.
+
+**Público-alvo:** equipes de segurança da informação, administradores de redes, pesquisadores da área e gestores de TI que precisam de ferramentas automatizadas para monitoramento e resposta a incidentes.
+
+---
 
 ## Problema
 
