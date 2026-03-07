@@ -43,57 +43,33 @@ O papel da questão de pesquisa é guiar todas as etapas do projeto — desde a 
 
 ## Objetivos preliminares
 
-Nesta seção, você deve apresentar os objetivos preliminares do trabalho, deixando claro que o objetivo geral é experimentar modelos de aprendizado de máquina adequados para solucionar o problema descrito anteriormente.
+Objetivo geral: experimentar e comparar técnicas de desenvolvimento de modelos de aprendizado supervisionado de máquina para classificação e detecção automática de ameaças cibernéticas em tráfego de rede, identificando qual abordagem oferece o melhor equilíbrio entre taxas de detecção e taxas de falsos positivos.
 
-Além do objetivo geral, é importante definir pelo menos dois objetivos específicos, que direcionem a investigação de acordo com o foco que o grupo pretende adotar. Esses objetivos específicos podem envolver: 
-* Explorar um determinado tipo de modelagem ou técnica de aprendizado de máquina;
-* Comparar diferentes abordagens para resolver o mesmo problema;
-* Aplicar o modelo em um cenário real ou simulado;
-* Otimizar parâmetros para melhorar métricas específicas de desempenho.
+Objetivo específico 1: aplicar um pipeline completo de ciência de dados sobre o conjunto de dados de tráfego de rede — incluindo limpeza, pré-processamento, engenharia de recursos, balanceamento e divisão estratificada entre treino e teste — garantindo a qualidade dos dados para o treinamento dos modelos.
 
-Exemplo:
-Objetivo específico 1: Predizer a tendência de alta, estabilidade ou queda de uma determinada ação em uma janela de tempo definida.
-Objetivo específico 2: Estimar o valor exato da ação ao final do período analisado.
-
-**Importante:** À medida que a pesquisa/experimentação avança, os objetivos podem ser ajustados ou refinados. Mantenha essa seção atualizada no repositório para refletir o andamento e as novas decisões do projeto.
- 
-> **Links Úteis**:
-> - [Objetivo geral e objetivo específico: como fazer e quais verbos utilizar](https://blog.mettzer.com/diferenca-entre-objetivo-geral-e-objetivo-especifico/)
+Objetivo específico 2: treinar o modelo de classificação (Árvore de Decisão e XGBoost), avaliando seu desempenho por meio de detalhes específicos para dados desequilibrados (F1-Score, ROC-AUC, Precision e Recall da classe de ataque), de modo que o modelo possa apresentar melhor capacidade de generalização para detecção de ameaças.
 
 ## Justificativa
 
-Nesta seção, apresente a importância e a motivação para trabalhar com o conjunto de dados escolhido. Explique por que esse dataset é relevante e como ele se conecta ao problema identificado anteriormente.
+A escolha do tema de detecção de ameaças cibernéticas é motivada tanto pela relevância prática e atual do problema quanto pela disponibilidade de dados estruturados adequados para aplicação de técnicas de aprendizado de máquina.
 
-Indique:
-* Razões para a escolha dos objetivos específicos – Justifique por que decidiu aprofundar sua investigação nessas metas, relacionando-as ao potencial de solução ou melhoria para o problema.
-* Relevância do estudo do problema – Mostre a importância de compreender e tratar a questão apresentada, tanto no contexto acadêmico quanto no profissional.
-* Impacto social, econômico ou ambiental – Descreva como o problema afeta a sociedade ou um setor específico, buscando sempre quantificar o impacto por meio de dados reais.
+Do ponto de vista do impacto econômico e social, os números são expressivos. Segundo o relatório IBM Cost of a Data Breach 2025 , o custo médio global de uma violação de dados atingiu US$ 4,4 milhões em 2025 . No Brasil , o custo médio por violação foi de R$ 7,19 milhões . O mesmo relatório aponta que ataques de credenciais comprometidos — categoria diretamente relacionada a ataques de força bruta e preenchimento de credenciais presentes no conjunto de dados deste projeto — são o vetor de entrada mais comum.
 
-**Importante:**
-* Apresente números, estatísticas e informações concretas, citando as fontes (relatórios, artigos científicos, portais oficiais etc.).
-* Mantenha a objetividade e a clareza, evitando argumentos genéricos.
-* Construa um texto coeso que conecte o problema, os objetivos e a relevância do trabalho.
+Além disso, segundo o relatório Cybersecurity Ventures , os danos globais causados ​​por crimes cibernéticos deverão atingir US$ 10,5 trilhões anuais até 2025 , o que representa a maior transferência de riqueza da história da humanidade. No Brasil, a Check Point Research registrou um aumento de 30% nos ataques cibernéticos no segundo trimestre de 2024 em comparação ao mesmo período do ano anterior, colocando o país entre os mais atacados da América Latina.
 
-> **Links Úteis**:
-> - [Como montar a justificativa](https://guiadamonografia.com.br/como-montar-justificativa-do-tcc/)
+Por fim, a relevância do tema é evidenciada pela grande quantidade de publicações e conteúdos que abordam detecção de intrusão com aprendizado de máquina, confirmando que esta é uma área ativa e com lacunas de pesquisa a serem exploradas.
 
 ## Público-Alvo
 
-Nesta seção, descreva quem poderá se beneficiar com a sua investigação, apresentando os diferentes perfis de pessoas ou grupos impactados.
+O projeto é relevante para diferentes perfis de usuários e partes interessadas:
 
-O objetivo aqui não é definir clientes específicos ou papéis exatos dentro da aplicação, mas sim compreender o perfil dos usuários e partes interessadas. Para isso, considere:
-* Conhecimentos prévios relacionados ao domínio do problema e ao uso de tecnologia;
-* Nível de familiaridade com recursos digitais e possíveis barreiras de uso;
-* Contexto profissional e hierárquico, quando aplicável (ex.: nível de decisão, responsabilidades, área de atuação);
-* Necessidades e expectativas que podem ser atendidas pelo projeto.
+Analistas de Segurança da Informação (Analistas SOC): profissionais com conhecimento técnico avançado em redes e segurança, familiarizados com ferramentas SIEM e IDS. São os usuários finais diretos de um sistema conforme o proposto. Possuem alto nível de familiaridade com recursos digitais e reuniões de ferramentas que reduzem o volume de alertas falsos e priorizam ameaças reais.
 
-**Dica:** Seja objetivo e baseie suas descrições em informações reais ou plausíveis para o contexto escolhido. Isso ajudará a manter o foco no desenvolvimento de soluções relevantes e aplicáveis.
+Administradores de Redes e Infraestrutura: responsáveis ​​pela gestão do tráfego de rede em empresas. Possuem conhecimento técnico intermediário a avançado e precisam de dashboards e relatórios que traduzam os resultados do modelo em ações práticas de resposta a incidentes.
 
-> **Links Úteis**:
-> - [Público-alvo](https://blog.hotmart.com/pt-br/publico-alvo/)
-> - [Como definir o público alvo](https://exame.com/pme/5-dicas-essenciais-para-definir-o-publico-alvo-do-seu-negocio/)
-> - [Público-alvo: o que é, tipos, como definir seu público e exemplos](https://klickpages.com.br/blog/publico-alvo-o-que-e/)
-> - [Qual a diferença entre público-alvo e persona?](https://rockcontent.com/blog/diferenca-publico-alvo-e-persona/)
+Gestores de TI e CISO (Chief Information Security Officer): tomadores de decisão com visão estratégica sobre riscos de segurança. Possuo menor familiaridade técnica com os modelos em si, mas analisamos considerações claras de desempenho para avaliar o retorno sobre o investimento em ferramentas de segurança.
+
+Pesquisadores e Estudantes da área de Segurança e Ciência de Dados: específicos em metodologias de detecção de intrusão, benchmarks de modelos e reprodutibilidade de experimentos. Beneficiam-se da documentação completa do pipeline e das escolhas metodológicas do projeto.
 
 ## Estado da Arte
 
