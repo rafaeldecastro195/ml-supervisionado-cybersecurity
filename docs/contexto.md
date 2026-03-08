@@ -260,7 +260,7 @@ O dataset contém registros de conexões de rede rotulados entre tráfego benign
 
 # Vídeo de apresentação da Etapa 01
 
-A apresentação poderá ser vista pelo seguinte link: [Apresentacao etapa1](https://youtu.be/Zv_VfYV-ZCk)
+A apresentação poderá ser vista pelo seguinte link: [Link no youtube](https://youtu.be/Zv_VfYV-ZCk)
 
 # Referências
 
