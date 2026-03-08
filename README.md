@@ -1,4 +1,4 @@
-# TÍTULO DO PROJETO
+# Detecção de ameaças cibernéticas com aprendizado de máquina
 
 `CURSO: Sistemas de Informação`
 
