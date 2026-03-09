@@ -262,9 +262,21 @@ O dataset contém registros de conexões de rede rotulados entre tráfego benign
 
 A apresentação poderá ser vista pelo seguinte link: [Link no youtube](https://youtu.be/Zv_VfYV-ZCk)
 
+
 # Referências
 
-Inclua todas as referências (livros, artigos, sites, etc) utilizados no desenvolvimento do trabalho utilizando o padrão ABNT.
+ONYEBUEKE, A. E.; DAVID, A. A.; MUNU, S. **Network Intrusion Detection System Using XGBoost and Random Forest Algorithms.** Asian Journal of Pure and Applied Mathematics, v. 5, n. 1, p. 321–335, 2023. Disponível em: https://jofmath.com/index.php/AJPAM/article/view/18
 
-> **Links Úteis**:
-> - [Padrão ABNT PUC Minas](https://portal.pucminas.br/biblioteca/index_padrao.php?pagina=5886)
+ANONYMOUS. **Machine Learning for Cybersecurity: Web Attack Detection (Brute Force, XSS, SQL Injection).** InPrime: Indonesian Journal of Pure and Applied Mathematics, v. 7, n. 1, p. 1–15, 2025. Disponível em: https://journal.uinjkt.ac.id/index.php/inprime/article/view/41025
+
+MDPI. **The Improved Network Intrusion Detection Techniques Using the Feature Engineering Approach with Boosting Classifiers.** Mathematics, v. 12, n. 24, art. 3909, 2024. Disponível em: https://www.mdpi.com/2227-7390/12/24/3909
+
+SPRINGER NATURE. **Deep Learning-Based Intrusion Detection for IoT Networks: A Scalable and Efficient Approach.** Journal on Information Security, 2025. Disponível em: https://link.springer.com/article/10.1186/s13635-025-00202-w
+
+MDPI. **Top-K Feature Selection for IoT Intrusion Detection: Contributions of XGBoost, LightGBM, and Random Forest.** Future Internet, v. 17, n. 11, art. 529, 2025. Disponível em: https://www.mdpi.com/1999-5903/17/11/529
+
+SHARAFALDIN, I.; LASHKARI, A. H.; GHORBANI, A. A. **Toward Generating a New Intrusion Detection Dataset and Intrusion Traffic Characterization.** In: INTERNATIONAL CONFERENCE ON INFORMATION SYSTEMS SECURITY AND PRIVACY (ICISSP), 4., 2018. Anais [...]. [S. l.]: SCITEPRESS, 2018. p. 108–116. DOI: 10.5220/0006639801080116.
+
+IBM SECURITY. **Cost of a Data Breach Report 2023.** Armonk: IBM Corporation, 2023. Disponível em: https://www.ibm.com/reports/data-breach
+
+CYBERSECURITY VENTURES. **Cybercrime to cost the world $10.5 trillion annually by 2025.** 2022. Disponível em: https://cybersecurityventures.com/hackerpocalypse-cybercrime-report-2016/
