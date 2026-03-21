@@ -22,44 +22,55 @@ O volume de tráfego de rede gerado por organizações modernas é imenso e cres
 
 O problema central deste projeto é: **como classificar automaticamente o tráfego de rede para identificar se uma conexão representa uma ameaça cibernética — e qual tipo de ataque está ocorrendo — de forma precisa e escalável?**
 
-Ataques como brute-force, port-scan, SQL injection, XSS, DDoS, command injection, credential stuffing e comunicações C2 (Command & Control) possuem características comportamentais distintas que se manifestam em variáveis como volume de bytes transferidos, portas utilizadas, protocolo de comunicação, horário da conexão e origem do tráfego. A combinação dessas variáveis, analisada por modelos de aprendizado de máquina, permite identificar padrões que seriam imperceptíveis a um analista humano em tempo real.
+Ataques como Exploits, DoS, Reconnaissance, Backdoor, Shellcode, Fuzzers e Worms possuem características comportamentais distintas que se manifestam em variáveis como duração da conexão, volume de bytes transferidos, jitter, taxa de perda de pacotes e estado da conexão TCP. A combinação dessas variáveis, analisada por modelos de aprendizado de máquina, permite identificar padrões que seriam imperceptíveis a um analista humano em tempo real.
 
 O contexto de aplicação é diretamente ligado a ambientes corporativos de segurança da informação, onde ferramentas como SIEM (Security Information and Event Management) e IDS (Intrusion Detection Systems) são utilizadas para monitoramento contínuo de redes. O modelo desenvolvido neste projeto simula a camada de inteligência que alimentaria esse tipo de sistema.
+
+---
 
 ## Questão de Pesquisa
 
 *É possível, utilizando técnicas de aprendizado de máquina aplicadas a dados de tráfego de rede, classificar automaticamente conexões como legítimas ou maliciosas com alta taxa de detecção e baixa taxa de falsos alarmes, identificando ainda o tipo específico de ameaça presente?*
 
 Ao final do projeto, espera-se que o modelo treinado seja capaz de responder a essa pergunta.
-## Objetivos preliminares
 
-Objetivo geral: experimentar e comparar técnicas de desenvolvimento de modelos de aprendizado supervisionado de máquina para classificação e detecção automática de ameaças cibernéticas em tráfego de rede, identificando qual abordagem oferece o melhor equilíbrio entre taxas de detecção e taxas de falsos positivos.
+---
 
-Objetivo específico 1: aplicar um pipeline completo de ciência de dados sobre o conjunto de dados de tráfego de rede — incluindo limpeza, pré-processamento, engenharia de recursos, balanceamento e divisão estratificada entre treino e teste — garantindo a qualidade dos dados para o treinamento dos modelos.
+## Objetivos Preliminares
 
-Objetivo específico 2: treinar o modelo de classificação (Árvore de Decisão e XGBoost), avaliando seu desempenho por meio de detalhes específicos para dados desequilibrados (F1-Score, ROC-AUC, Precision e Recall da classe de ataque), de modo que o modelo possa apresentar melhor capacidade de generalização para detecção de ameaças.
+**Objetivo geral:** experimentar e comparar técnicas de desenvolvimento de modelos de aprendizado supervisionado de máquina para  classificação e detecção automática de ameaças cibernéticas em tráfego de rede, identificando qual abordagem oferece o melhor equilíbrio entre taxa de detecção e taxa de falsos positivos.
+
+**Objetivo específico 1:** aplicar um pipeline completo de ciência de dados sobre o dataset de tráfego de rede — incluindo limpeza, pré-processamento, engenharia de features, balanceamento  e divisão estratificada entre treino e teste — garantindo a qualidade dos dados para o treinamento dos modelos.
+
+**Objetivo específico 2:** treinar o modelo de classificação (Árvore de Decisão e XGBoost), avaliando seu desempenho por meio de métricas adequadas para dados desbalanceados (F1-Score, ROC-AUC, Precision e Recall da classe de ataque), de modo que o modelo possa apresentar melhor capacidade de generalização para detecção de ameaças.
+
+---
 
 ## Justificativa
 
 A escolha do tema de detecção de ameaças cibernéticas é motivada tanto pela relevância prática e atual do problema quanto pela disponibilidade de dados estruturados adequados para aplicação de técnicas de aprendizado de máquina.
 
-Do ponto de vista do impacto econômico e social, os números são expressivos. Segundo o relatório IBM Cost of a Data Breach 2025 , o custo médio global de uma violação de dados atingiu US$ 4,4 milhões em 2025 . No Brasil , o custo médio por violação foi de R$ 7,19 milhões . O mesmo relatório aponta que ataques de credenciais comprometidos — categoria diretamente relacionada a ataques de força bruta e preenchimento de credenciais presentes no conjunto de dados deste projeto — são o vetor de entrada mais comum.
+Do ponto de vista do impacto econômico e social, os números são expressivos. Segundo o relatório [IBM Cost of a Data Breach 2025](https://www.ibm.com/reports/data-breach), o custo médio global de uma violação de dados atingiu **US$ 4,4 milhões em 2025**. [No Brasil](https://brasil.newsroom.ibm.com/2025-07-30-Relatorio-da-IBM-Custo-medio-de-uma-violacao-de-dados-no-Brasil-atinge-R-7,19-milhoes), o custo médio por violação foi de **R$ 7,19 milhões**. O mesmo relatório aponta que ataques de credenciais comprometidas — categoria diretamente relacionada a ataques de brute-force e credential-stuffing presentes no dataset deste projeto — são o vetor de entrada mais comum.
 
-Além disso, segundo o relatório Cybersecurity Ventures , os danos globais causados ​​por crimes cibernéticos deverão atingir US$ 10,5 trilhões anuais até 2025 , o que representa a maior transferência de riqueza da história da humanidade. No Brasil, a Check Point Research registrou um aumento de 30% nos ataques cibernéticos no segundo trimestre de 2024 em comparação ao mesmo período do ano anterior, colocando o país entre os mais atacados da América Latina.
+Adicionalmente, segundo o relatório [Cybersecurity Ventures](https://cybersecurityventures.com/cybercrime-damage-costs-10-trillion-by-2025/), os danos globais causados por crimes cibernéticos devem atingir **US$ 10,5 trilhões anuais até 2025**, o que representa a maior transferência de riqueza da história da humanidade. No Brasil, a [Check Point Research](https://blog.checkpoint.com/research/check-point-research-reports-highest-increase-of-global-cyber-attacks-seen-in-last-two-years-a-30-increase-in-q2-2024-global-cyber-attacks/) registrou um **aumento de 30% nos ataques cibernéticos no segundo trimestre de 2024** em comparação ao mesmo período do ano anterior, colocando o país entre os mais atacados da América Latina.
 
-Por fim, a relevância do tema é evidenciada pela grande quantidade de publicações e conteúdos que abordam detecção de intrusão com aprendizado de máquina, confirmando que esta é uma área ativa e com lacunas de pesquisa a serem exploradas.
+Por fim, a relevância do tema é evidenciada pela grande quantidade de publicações e conteúdos que abordam detecção de intrusão com machine learning, confirmando que esta é uma área ativa e com lacunas de pesquisa a serem exploradas.
+
+---
 
 ## Público-Alvo
 
 O projeto é relevante para diferentes perfis de usuários e partes interessadas:
 
-Analistas de Segurança da Informação (Analistas SOC): profissionais com conhecimento técnico avançado em redes e segurança, familiarizados com ferramentas SIEM e IDS. São os usuários finais diretos de um sistema conforme o proposto. Possuem alto nível de familiaridade com recursos digitais e reuniões de ferramentas que reduzem o volume de alertas falsos e priorizam ameaças reais.
+**Analistas de Segurança da Informação (SOC Analysts):** profissionais com conhecimento técnico avançado em redes e segurança, familiarizados com ferramentas SIEM e IDS. São os usuários finais diretos de um sistema como o proposto. Possuem alto nível de familiaridade com recursos digitais e necessitam de ferramentas que reduzam o volume de alertas falsos e priorizem ameaças reais.
 
-Administradores de Redes e Infraestrutura: responsáveis ​​pela gestão do tráfego de rede em empresas. Possuem conhecimento técnico intermediário a avançado e precisam de dashboards e relatórios que traduzam os resultados do modelo em ações práticas de resposta a incidentes.
+**Administradores de Redes e Infraestrutura:** responsáveis pela gestão do tráfego de rede em empresas. Possuem conhecimento técnico intermediário a avançado e precisam de dashboards e relatórios que traduzam os resultados do modelo em ações práticas de resposta a incidentes.
 
-Gestores de TI e CISO (Chief Information Security Officer): tomadores de decisão com visão estratégica sobre riscos de segurança. Possuo menor familiaridade técnica com os modelos em si, mas analisamos considerações claras de desempenho para avaliar o retorno sobre o investimento em ferramentas de segurança.
+**Gestores de TI e CISO (Chief Information Security Officer):** tomadores de decisão com visão estratégica sobre riscos de segurança. Possuem menor familiaridade técnica com os modelos em si, mas necessitam de métricas claras de desempenho para avaliar o retorno sobre o investimento em ferramentas de segurança.
 
-Pesquisadores e Estudantes da área de Segurança e Ciência de Dados: específicos em metodologias de detecção de intrusão, benchmarks de modelos e reprodutibilidade de experimentos. Beneficiam-se da documentação completa do pipeline e das escolhas metodológicas do projeto.
+**Pesquisadores e Estudantes da área de Segurança e Ciência de Dados:** interessados em metodologias de detecção de intrusão, benchmarks de modelos e reprodutibilidade de experimentos. Beneficiam-se da documentação completa do pipeline e das escolhas metodológicas do projeto.
+
+---
 
 ## Estado da Arte
 
@@ -164,119 +175,154 @@ As lacunas identificadas na literatura incluem: (1) a maioria dos estudos utiliz
 
 Este projeto se alinha com os estudos identificados ao adotar os mesmos algoritmos consagrados (Regressão Logística como baseline, Random Forest e XGBoost como modelos principais), aplicar SMOTE para tratamento do desbalanceamento e avaliar os modelos com métricas adequadas ao contexto (F1-Score, Recall e ROC-AUC). Diferencia-se ao utilizar um dataset com maior diversidade de tipos de ataque e ao explorar a engenharia de features sobre variáveis temporais e de protocolo, aspectos menos explorados nos trabalhos levantados.
 
+---
+
 # Descrição do Dataset Selecionado
 
 ## Identificação e Origem
 
 | Atributo | Informação |
 |---|---|
-| **Nome** | Cybersecurity Threat Detection Dataset |
-| **Fonte** | Kaggle — usuário dhrubangtalukdar |
-| **URL** | https://www.kaggle.com/datasets/dhrubangtalukdar/cybersecurity-threat-detection-dataset |
-| **Licença** | Verificar na página do Kaggle |
-| **Formato** | CSV único (cybersecurity.csv) |
-| **Tamanho** | ~2 MB |
+| **Nome** | UNSW-NB15 |
+| **Instituição** | University of New South Wales (UNSW), Austrália |
+| **Publicação** | IEEE Military Communications Conference (MILCOM), 2015 |
+| **Fonte Kaggle** | https://www.kaggle.com/datasets/dhoogla/unswnb15 |
+| **Licença** | Uso acadêmico e de pesquisa |
+| **Formato** | Parquet (treino e teste separados) |
+| **Tamanho** | ~4,54 MB |
 
 ## Visão Geral
-
-O dataset contém registros de conexões de rede rotulados entre tráfego benigno e diferentes tipos de ataques cibernéticos. Cada registro representa uma única conexão de rede com informações sobre origem, destino, protocolo, volume de dados transferidos e classificação de segurança.
-
+ 
+O UNSW-NB15 foi criado pelo Cyber Range Lab da UNSW usando a ferramenta IXIA PerfectStorm para gerar tráfego de ataque realista combinado com tráfego normal capturado em ambiente de laboratório controlado. É amplamente utilizado como benchmark em pesquisas de detecção de intrusão.
+ 
 | Métrica | Valor |
 |---|---|
-| **Total de registros** | 10.000 |
-| **Total de atributos** | 13 colunas |
-| **Tráfego benigno (label = 0)** | 9.600 registros (96%) |
-| **Tráfego malicioso (label = 1)** | 400 registros (4%) |
-| **Valores nulos** | 3.232 (apenas na coluna `url`) |
-| **Duplicatas** | Nenhuma |
-| **Período** | Outubro de 2025 (dado sintético/simulado) |
+| **Total de registros (bruto)** | 257.673 |
+| **Treino (bruto)** | 175.341 |
+| **Teste (bruto)** | 82.332 |
+| **Total após limpeza** | 146.793 |
+| **Treino após limpeza** | 96.822 |
+| **Teste após limpeza** | 49.971 |
+| **Atributos** | 36 colunas |
+| **Valores nulos** | Nenhum  |
+| **Duplicatas identificadas** | 110.880 (a remover) |
+ 
 
-## Distribuição dos Tipos de Ataque
-
-| Tipo de Ataque | Registros | Descrição |
+## Distribuição das Classes
+ 
+| Conjunto | Normal | Ataque | Observação |
+|---|---|---|---|
+| **Treino (após limpeza)** | 48.894 (50,5%) | 47.928 (49,5%) | Praticamente balanceado |
+| **Teste (após limpeza)** | 31.610 (63,3%) | 18.361 (36,7%) | Distribuição diferente do treino |
+ 
+## Categorias de Ataque
+ 
+| Categoria | Registros (treino) | Descrição |
 |---|---|---|
-| benign | 9.600 | Tráfego legítimo normal |
-| brute-force | 108 | Tentativas repetidas de autenticação |
-| port-scan | 81 | Varredura de portas abertas |
-| sql-injection | 64 | Injeção de comandos SQL maliciosos |
-| xss | 34 | Cross-Site Scripting |
-| credential-stuffing | 28 | Uso de credenciais vazadas |
-| ddos | 27 | Negação de serviço distribuída |
-| command-injection | 26 | Injeção de comandos no sistema |
-| exploit-attempt | 22 | Tentativa de exploração de vulnerabilidades |
-| c2 | 10 | Comunicação com servidor Command & Control |
-
+| Normal | 56.000 | Tráfego legítimo |
+| Generic | 40.000 | Ataques genéricos a cifras de bloco |
+| Exploits | 33.393 | Exploração de vulnerabilidades conhecidas |
+| Fuzzers | 18.184 | Envio de dados aleatórios para encontrar falhas |
+| DoS | 12.264 | Negação de serviço |
+| Reconnaissance | 10.491 | Varredura e coleta de informações |
+| Analysis | 2.000 | Análise de portas e e-mails maliciosos |
+| Backdoor | 1.746 | Acesso não autorizado persistente |
+| Shellcode | 1.133 | Execução de código malicioso |
+| Worms | 130 | Propagação automática de malware |
+ 
 ## Descrição dos Atributos
-
-| Coluna | Tipo | Descrição | Valores Ausentes | Exemplos |
-|---|---|---|---|---|
-| `timestamp` | String (datetime) | Data e hora da conexão. Permite extração de features temporais como hora do dia e dia da semana. | Nenhum | 2025-10-01 00:12:54 |
-| `src_ip` | String | Endereço IP de origem da conexão. Identificador de rede, não utilizado diretamente como feature preditiva. | Nenhum | 188.176.27.165 |
-| `dst_ip` | String | Endereço IP de destino da conexão. | Nenhum | 10.0.0.5 |
-| `src_port` | Inteiro | Porta de origem da conexão. Varia de 21 a 65.524. | Nenhum | 45231 |
-| `dst_port` | Inteiro | Porta de destino da conexão. Portas como 80 (HTTP), 443 (HTTPS) e 22 (SSH) são comuns. | Nenhum | 443 |
-| `protocol` | String | Protocolo de comunicação utilizado: TCP, UDP ou ICMP. | Nenhum | TCP (77,65%), UDP (19,1%), ICMP (3,25%) |
-| `bytes_sent` | Inteiro | Volume de bytes enviados na conexão. Varia de 17 a 139.170.400. | Nenhum | 22.000 |
-| `bytes_received` | Inteiro | Volume de bytes recebidos na conexão. Varia de 3 a 291.483.000. | Nenhum | 37.473 |
-| `user_agent` | String | Agente de usuário HTTP da conexão. Indica o navegador ou ferramenta utilizada. | Nenhum | Mozilla/5.0 (Windows NT 10.0...) |
-| `url` | String | URL acessada na conexão. Ausente para conexões UDP e ICMP que não geram requisições HTTP. | **3.232 (32,32%)** | https://webmail.corp/login |
-| `is_internal_traffic` | Booleano | Indica se a conexão é interna à rede (True) ou externa (False). | Nenhum | False (84,66%), True (15,34%) |
-| `label` | Inteiro (0 ou 1) | **Variável-alvo binária.** 0 = tráfego legítimo, 1 = ataque cibernético. | Nenhum | 0, 1 |
-| `attack_type` | String | **Variável-alvo multiclasse.** Especifica o tipo de ataque ou "benign". Usada para análise, não como feature preditiva. | Nenhum | benign, brute-force, ddos... |
-
+ 
+| Coluna | Tipo | Descrição |
+|---|---|---|
+| `dur` | Float | Duração da conexão em segundos |
+| `proto` | Categórico | Protocolo de rede (tcp, udp, arp, ospf...) |
+| `service` | Categórico | Serviço da conexão (http, dns, ftp, smtp, ssh...) |
+| `state` | Categórico | Estado da conexão (FIN, INT, CON, REQ, RST...) |
+| `spkts` | Inteiro | Número de pacotes enviados pela origem |
+| `dpkts` | Inteiro | Número de pacotes enviados pelo destino |
+| `sbytes` | Inteiro | Total de bytes enviados pela origem |
+| `dbytes` | Inteiro | Total de bytes enviados pelo destino |
+| `rate` | Float | Taxa de pacotes por segundo da conexão |
+| `sload` | Float | Carga de bits por segundo da origem |
+| `dload` | Float | Carga de bits por segundo do destino |
+| `sloss` | Inteiro | Pacotes retransmitidos ou perdidos pela origem |
+| `dloss` | Inteiro | Pacotes retransmitidos ou perdidos pelo destino |
+| `sinpkt` | Float | Tempo médio entre pacotes da origem (ms) |
+| `dinpkt` | Float | Tempo médio entre pacotes do destino (ms) |
+| `sjit` | Float | Jitter (variação de latência) da origem |
+| `djit` | Float | Jitter (variação de latência) do destino |
+| `swin` | Inteiro | Tamanho da janela TCP da origem |
+| `stcpb` | Inteiro | Número de sequência TCP da origem |
+| `dtcpb` | Inteiro | Número de sequência TCP do destino |
+| `dwin` | Inteiro | Tamanho da janela TCP do destino |
+| `tcprtt` | Float | Round-trip time (RTT) do handshake TCP |
+| `synack` | Float | Tempo entre pacotes SYN e SYN-ACK |
+| `ackdat` | Float | Tempo entre pacotes SYN-ACK e ACK |
+| `smean` | Inteiro | Tamanho médio dos pacotes da origem (bytes) |
+| `dmean` | Inteiro | Tamanho médio dos pacotes do destino (bytes) |
+| `trans_depth` | Inteiro | Profundidade da transação HTTP |
+| `response_body_len` | Inteiro | Tamanho do corpo da resposta HTTP |
+| `ct_src_dport_ltm` | Inteiro | Conexões recentes do mesmo IP/porta de destino |
+| `ct_dst_sport_ltm` | Inteiro | Conexões recentes ao mesmo IP/porta de origem |
+| `is_ftp_login` | Binário | Indica se a sessão FTP foi autenticada (1/0) |
+| `ct_ftp_cmd` | Inteiro | Número de comandos FTP na sessão |
+| `ct_flw_http_mthd` | Inteiro | Número de métodos HTTP (GET, POST) na conexão |
+| `is_sm_ips_ports` | Binário | IPs e portas de origem/destino iguais (1/0) |
+| `attack_cat` | Categórico | **Variável-alvo multiclasse** — tipo de ataque ou Normal |
+| `label` | Binário (0/1) | **Variável-alvo binária** — 0 = Normal, 1 = Ataque |
+ 
 ## Qualidade dos Dados
-
+ 
 **Pontos positivos:**
-- Nenhuma duplicata identificada.
-- Apenas uma coluna com valores ausentes (`url`), com justificativa técnica clara, já que algumas conexões não geram URL.
-- Variáveis-alvo, label e attack_type, bem definida em duas granularidades (binária e multiclasse).
-- Distribuição de protocolos realista (TCP dominante, seguido de UDP e ICMP).
-
+- Nenhum valor nulo em nenhuma coluna.
+- Dataset publicado em conferência IEEE, amplamente validado pela comunidade científica.
+- Treino e teste separados oficialmente, permitindo comparação com literatura.
+- Features ricas com significado técnico claro em segurança de redes.
+ 
 **Desafios identificados e tratamentos planejados:**
-
+ 
 | Problema | Descrição | Tratamento Planejado |
 |---|---|---|
-| **Valores nulos em `url`** | 3.232 registros sem URL (conexões UDP/ICMP) | Substituir por `'sem_url'` — ausência de URL é informação relevante |
-| **Colunas textuais não numéricas** | `src_ip`, `dst_ip`, `user_agent`, `url` | Tranformar os valores correspondentes em features numéricas |
-| **`timestamp` não numérico** | Data/hora em formato string | Extração de `hora` e `dia_semana` como features numéricas |
-| **`is_internal_traffic` booleano** | True/False | Conversão para 1/0 |
-| **`attack_type` como feature** | Seria vazamento de informação (data leakage) | Utilizada apenas para análise exploratória, removida do modelo |
-
+| **Duplicatas** | 110.880 registros duplicados (43% do total) | Remoção antes do treinamento |
+| **Variáveis categóricas** | `proto`, `service`, `state` são texto | One-Hot Encoding ou Label Encoding |
+| **Distribuição treino ≠ teste** | Treino: 50/50 — Teste: 63/37 | Avaliação com métricas robustas (F1, ROC-AUC) |
+| **Outliers em features numéricas** | `rate` chega a 1.000.000 e `sload` a ~6 bilhões | Normalização com StandardScaler ou RobustScaler |
+| **`attack_cat` como feature** | Seria vazamento de informação (data leakage) | Usada apenas para análise, removida do modelo |
+ 
 ## Critérios de Qualidade Atendidos
-
-| Critério (orientações do projeto) | Avaliação |
+ 
+| Critério | Avaliação |
 |---|---|
-| **Representatividade** | Cobre 9 tipos de ataque relevantes e modernos |
-| **Qualidade dos dados** | Sem duplicatas; único problema de nulos tem solução clara |
-| **Contexto e significado** | Todas as colunas têm significado técnico claro em segurança de redes |
-| **Ética e privacidade** | IPs e dados de usuário são sintéticos/simulados; sem dados pessoais reais |
-| **Atualidade e relevância** | Tipos de ataque modernos (C2, credential-stuffing, XSS) |
-| **Tamanho do dataset** | 10.000 registros — atende ao mínimo exigido |
-
+| **Representatividade** |  Tráfego real capturado em laboratório da UNSW com ataques simulados realisticamente |
+| **Qualidade dos dados** |  Sem valores nulos; duplicatas identificadas e removíveis |
+| **Contexto e significado** |  Todas as 36 colunas têm significado técnico documentado |
+| **Ética e privacidade** |  Dados de laboratório controlado; sem dados pessoais reais |
+| **Atualidade e relevância** |  Tipos de ataque relevantes; dataset referência na literatura atual |
+| **Credibilidade acadêmica** |  Publicado em IEEE, citado em centenas de artigos científicos |
+| **Tamanho do dataset** |  146.793 registros após limpeza — muito acima do mínimo exigido |
+ 
 ---
-# Canvas analítico
 
-![CanvaAnalitico](/docs/img/canvaanlitico.png)
+# Canvas Analítico
 
-# Vídeo de apresentação da Etapa 01
-
-A apresentação poderá ser vista pelo seguinte link: [Link no youtube](https://youtu.be/Zv_VfYV-ZCk)
-
+![CanvaAnalitico](/docs/img/novocanvaanalitco.png)
 
 # Referências
 
+MOUSTAFA, N.; SLAY, J. **UNSW-NB15: a comprehensive data set for network intrusion detection systems.** In: MILITARY COMMUNICATIONS AND INFORMATION SYSTEMS CONFERENCE (MilCIS), 2015, Canberra. Anais [...]. IEEE, 2015. DOI: 10.1109/MilCIS.2015.7348942.
+ 
 ONYEBUEKE, A. E.; DAVID, A. A.; MUNU, S. **Network Intrusion Detection System Using XGBoost and Random Forest Algorithms.** Asian Journal of Pure and Applied Mathematics, v. 5, n. 1, p. 321–335, 2023. Disponível em: https://jofmath.com/index.php/AJPAM/article/view/18
-
-ANONYMOUS. **Machine Learning for Cybersecurity: Web Attack Detection (Brute Force, XSS, SQL Injection).** InPrime: Indonesian Journal of Pure and Applied Mathematics, v. 7, n. 1, p. 1–15, 2025. Disponível em: https://journal.uinjkt.ac.id/index.php/inprime/article/view/41025
-
+ 
+ANONYMOUS. **Machine Learning for Cybersecurity: Web Attack Detection (Brute Force, XSS, SQL Injection).** InPrime: Indonesian Journal of Pure and Applied Mathematics, v. 7, n. 1, 2025. Disponível em: https://journal.uinjkt.ac.id/index.php/inprime/article/view/41025
+ 
 MDPI. **The Improved Network Intrusion Detection Techniques Using the Feature Engineering Approach with Boosting Classifiers.** Mathematics, v. 12, n. 24, art. 3909, 2024. Disponível em: https://www.mdpi.com/2227-7390/12/24/3909
-
+ 
 SPRINGER NATURE. **Deep Learning-Based Intrusion Detection for IoT Networks: A Scalable and Efficient Approach.** Journal on Information Security, 2025. Disponível em: https://link.springer.com/article/10.1186/s13635-025-00202-w
-
+ 
 MDPI. **Top-K Feature Selection for IoT Intrusion Detection: Contributions of XGBoost, LightGBM, and Random Forest.** Future Internet, v. 17, n. 11, art. 529, 2025. Disponível em: https://www.mdpi.com/1999-5903/17/11/529
-
-SHARAFALDIN, I.; LASHKARI, A. H.; GHORBANI, A. A. **Toward Generating a New Intrusion Detection Dataset and Intrusion Traffic Characterization.** In: INTERNATIONAL CONFERENCE ON INFORMATION SYSTEMS SECURITY AND PRIVACY (ICISSP), 4., 2018. Anais [...]. [S. l.]: SCITEPRESS, 2018. p. 108–116. DOI: 10.5220/0006639801080116.
-
+ 
 IBM SECURITY. **Cost of a Data Breach Report 2023.** Armonk: IBM Corporation, 2023. Disponível em: https://www.ibm.com/reports/data-breach
-
+ 
 CYBERSECURITY VENTURES. **Cybercrime to cost the world $10.5 trillion annually by 2025.** 2022. Disponível em: https://cybersecurityventures.com/hackerpocalypse-cybercrime-report-2016/
+
+---
