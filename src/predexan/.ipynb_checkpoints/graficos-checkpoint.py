@@ -69,6 +69,8 @@ def determinar_limite_x(df, nome_col):
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
 
+#============================================================================================================================================================================================================================================
+
 def gerar_histograma(df, nome_col, largura=12, altura=4, legenda=False, curva_normal=False, kde=False, cor='#E6B75C', stat='density', largura_linha=2, limite_x=False):
     '''Função que gera histograma com a possibilidade de gerar Curva de Distribuição Normal e KDE sobrepostos'''
     try:
@@ -104,6 +106,8 @@ def gerar_histograma(df, nome_col, largura=12, altura=4, legenda=False, curva_no
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
 
+#============================================================================================================================================================================================================================================
+
 # Funções para geração de gráficos boxplot
 
 def gerar_boxplot(df, nome_col, altura=4, largura=12, cor='#8B56FC', showfliers=True):
@@ -135,7 +139,9 @@ def gerar_boxplot(df, nome_col, altura=4, largura=12, cor='#8B56FC', showfliers=
         print(f'Ocorreu o seguinte erro: {e}')
         return None
 
-# Funções para geração de gráficos scatterplot e t-SNE
+#============================================================================================================================================================================================================================================
+
+# Funções para geração de gráficos scatterplot, t-SNE, regressão logística
    
 def gerar_tsne_2d(df, nome_col, num_componentes=2, taxa_aprendizado='auto', inicio='random', perplexidade=30):
     '''Essa função gera um algoritmo de TSNE '''
@@ -159,8 +165,49 @@ def gerar_tsne_2d(df, nome_col, num_componentes=2, taxa_aprendizado='auto', inic
     except Exception as e:
         print(f'Ocorreu o seguinte erro: {e}')
         return None, None
+
+def gerar_visualizacao_regressao_logística(df, nome_col, target):
+    '''Essa função gera uma visualização dos dados para Regressão Logística em relação ao alvo'''
+    try:
+        fig, ax = plt.subplots()
+
+        plt.scatter(X_treino, y_treino)
+
+        plt.set(y_ticks=(0,1))
+
+        plt.show()
+
+    except ValueError:
+        print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        return None
+        
+    except KeyError:
+        print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        return None
+
+    except Exception as e:
+        print(f'Ocorreu o seguinte erro: {e}')
+        return None
+
+def gerar_sigmoid(df, nome_col):
+    '''Essa função gera o resultado da função sigmoid'''
+    try:
+        funcao_sigmoid = 1/(1 + np.exp(- df[nome_col]))
+        return funcao_sigmoid
     
-def gerar_scatterplot(df, nome_col, largura=12, altura=4, x=None, y=None, tsne2d=False):
+    except ValueError:
+        print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        return None
+        
+    except KeyError:
+        print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        return None
+
+    except Exception as e:
+        print(f'Ocorreu o seguinte erro: {e}')
+        return None
+    
+def gerar_scatterplot(df, nome_col, largura=12, altura=4, x=None, y=None, tsne2d=False, visualizacao_rl=False, alpha=0.5):
     '''Essa função gera um Scatterplot com possibilidade de visualização de TSNE 2D'''
     try: 
 
@@ -169,14 +216,17 @@ def gerar_scatterplot(df, nome_col, largura=12, altura=4, x=None, y=None, tsne2d
         if not tsne2d:
             x = x if x is not None else df.index
             y = y if y is not None else df[nome_col]
-            grafico = sns.scatterplot(data=df, x=x, y=y, hue=df[nome_col])
+            grafico = sns.scatterplot(data=df, x=x, y=y, hue=df[nome_col], alpha=alpha)
             plt.title(f'Scatterplot do atributo {nome_col}')
         if tsne2d:
             X, X_incorporado = gerar_tsne_2d(df, nome_col)
             grafico = sns.scatterplot(x=X_incorporado[:, 0],
                                      y=X_incorporado[:,1],
-                                     hue=df[nome_col])
-            plt.title(f'Scatterplot, com t-SNE 2D, do atributo {nome_col}') 
+                                     hue=df[nome_col],
+                                     alpha=alpha)
+            plt.title(f'Scatterplot, com t-SNE 2D, do atributo {nome_col}')
+
+        if visualizacao_rl:
     
         plt.show()
         plt.close()

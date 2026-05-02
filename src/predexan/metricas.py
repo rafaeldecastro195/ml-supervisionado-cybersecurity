@@ -241,8 +241,10 @@ def imprimir_regra_ouro_normal(df, nome_col):
 
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        return None, None, None, None, None, None, None, None
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
-        return None
+        return None, None, None, None, None, None, None, None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        return None, None, None, None, None, None, None, None
