@@ -23,11 +23,14 @@ def drop_outlier(df, nome_col, outlier_inferior, outlier_superior):
     
 # Função que normaliza os dados, baseada em escalonamento robusto
 
-def normalizar_feature_rs(df, nome_col, escalonador, div_max=False):
+def normalizar_feature_rs(df, nome_col, escalonador, transformar_apenas=False, div_max=False):
     '''Função usada para normalizar features com escalonamento robusto e possibilidade de dividir o resultado pelo valor máximo'''
     try:
-        
-        col_escalonada = escalonador.fit_transform(df[[nome_col]])
+        if transformar_apenas == False:
+            col_escalonada = escalonador.fit_transform(df[[nome_col]])
+
+        if transformar_apenas:
+            col_escalonada = escalonador.transform(df[[nome_col]])
 
         if div_max:
             max_escalonado = col_escalonada.max()

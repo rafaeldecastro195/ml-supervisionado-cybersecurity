@@ -69,8 +69,6 @@ def determinar_limite_x(df, nome_col):
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
 
-#============================================================================================================================================================================================================================================
-
 def gerar_histograma(df, nome_col, largura=12, altura=4, legenda=False, curva_normal=False, kde=False, cor='#E6B75C', stat='density', largura_linha=2, limite_x=False):
     '''Função que gera histograma com a possibilidade de gerar Curva de Distribuição Normal e KDE sobrepostos'''
     try:
@@ -225,8 +223,6 @@ def gerar_scatterplot(df, nome_col, largura=12, altura=4, x=None, y=None, tsne2d
                                      hue=df[nome_col],
                                      alpha=alpha)
             plt.title(f'Scatterplot, com t-SNE 2D, do atributo {nome_col}')
-
-        if visualizacao_rl:
     
         plt.show()
         plt.close()

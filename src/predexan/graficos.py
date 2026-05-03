@@ -223,8 +223,6 @@ def gerar_scatterplot(df, nome_col, largura=12, altura=4, x=None, y=None, tsne2d
                                      hue=df[nome_col],
                                      alpha=alpha)
             plt.title(f'Scatterplot, com t-SNE 2D, do atributo {nome_col}')
-
-        if visualizacao_rl:
     
         plt.show()
         plt.close()

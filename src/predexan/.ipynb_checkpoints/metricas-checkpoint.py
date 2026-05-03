@@ -248,3 +248,7 @@ def imprimir_regra_ouro_normal(df, nome_col):
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
         return None, None, None, None, None, None, None, None
+
+def calcular_percentual(var, total):
+    percentual = (((var)/(total))*100)
+    return percentual
