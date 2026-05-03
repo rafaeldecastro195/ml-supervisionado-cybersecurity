@@ -164,46 +164,6 @@ def gerar_tsne_2d(df, nome_col, num_componentes=2, taxa_aprendizado='auto', inic
         print(f'Ocorreu o seguinte erro: {e}')
         return None, None
 
-def gerar_visualizacao_regressao_logística(df, nome_col, target):
-    '''Essa função gera uma visualização dos dados para Regressão Logística em relação ao alvo'''
-    try:
-        fig, ax = plt.subplots()
-
-        plt.scatter(X_treino, y_treino)
-
-        plt.set(y_ticks=(0,1))
-
-        plt.show()
-
-    except ValueError:
-        print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
-        return None
-        
-    except KeyError:
-        print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
-        return None
-
-    except Exception as e:
-        print(f'Ocorreu o seguinte erro: {e}')
-        return None
-
-def gerar_sigmoid(df, nome_col):
-    '''Essa função gera o resultado da função sigmoid'''
-    try:
-        funcao_sigmoid = 1/(1 + np.exp(- df[nome_col]))
-        return funcao_sigmoid
-    
-    except ValueError:
-        print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
-        return None
-        
-    except KeyError:
-        print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
-        return None
-
-    except Exception as e:
-        print(f'Ocorreu o seguinte erro: {e}')
-        return None
     
 def gerar_scatterplot(df, nome_col, largura=12, altura=4, x=None, y=None, tsne2d=False, visualizacao_rl=False, alpha=0.5):
     '''Essa função gera um Scatterplot com possibilidade de visualização de TSNE 2D'''
@@ -231,6 +191,27 @@ def gerar_scatterplot(df, nome_col, largura=12, altura=4, x=None, y=None, tsne2d
     
         return grafico
 
+    except ValueError:
+        print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        return None
+        
+    except KeyError:
+        print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        return None
+
+    except Exception as e:
+        print(f'Ocorreu o seguinte erro: {e}')
+        return None
+
+def gerar_regplot(df, nome_col, eixo_y, log=False):
+    '''Essa função gera um scatterplot de regressão'''
+    try:
+        plt.gca().set(x_lim=(nome_col.min(), nome_col.max))
+        grafico_regressao = sns.regplot(data=df, x=nome_col, y=eixo_y, logistic=log)
+        plt.show()
+        plt.close()
+        return grafico_regressao
+    
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
         return None
