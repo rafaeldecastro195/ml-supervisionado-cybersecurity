@@ -1,3 +1,8 @@
+import pandas as pd
+import numpy as np
+import time
+import tracemalloc
+
 def gerar_analise_basica(df, nome_col):
     '''Essa função gera valores de Análise Básica de um ou mais atributos'''
     try:   
@@ -250,5 +255,121 @@ def imprimir_regra_ouro_normal(df, nome_col):
         return None, None, None, None, None, None, None, None
 
 def calcular_percentual(var, total):
-    percentual = (((var)/(total))*100)
-    return percentual
+    '''Função que calcula o percentual de uma variável em relação ao todo'''
+    try:
+        percentual = (((var)/(total))*100)
+        
+        return percentual
+
+    except ValueError:
+        print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        return None
+    except Exception as e:
+        print(f'Ocorreu esse erro: {e}')
+        return None
+
+def medir_tempo(funcao, *args, **kwargs):
+    '''Executa a função e mede o tempo real de processamento'''
+    try:
+        comeco = time.perf_counter()
+        resultado = funcao(*args, **kwargs) # Executa o treino/comando aqui  -> *args transforma o parâmetro em listas e tuplas (é possível colocar quantos argumentos forem necessários) e **kwargs, em dicionário
+        fim = time.perf_counter()
+        
+        return (fim - comeco), resultado
+    except Exception as e:
+        print(f"Erro na medição: {e}")
+        return None, None
+
+def imprimir_tempo(funcao, *args, **kwargs):
+    '''Função que recebe N argumentos e os repassa para a função de medição. Imprime o tempo de processamento'''
+    try:
+        # Repassamos tudo que recebemos (*args, **kwargs) para medir_tempo
+        tempo, resultado = medir_tempo(funcao, *args, **kwargs)
+
+        if tempo is not None:
+            print(f"Tempo total de processamento: {tempo:.4f} segundos.")
+        else:
+            print("Não foi possível medir o tempo.")
+            
+        return resultado
+    except Exception as e:
+        print(f"Erro na impressão: {e}")
+        return None
+
+def registrar_memoria(funcao, *arg, **kwarg):
+    '''Função que gera valores de gasto de memória em MB por função'''
+    try:
+        tracemalloc.start()
+        tracemalloc.reset_peak()
+
+        resultado = funcao(*arg, **kwarg)
+
+        atual_b, pico_b = tracemalloc.get_traced_memory()
+        
+        atual_mb = atual_b / (1024 * 1024)
+        pico_mb = pico_b / (1024 * 1024)
+
+        return resultado, atual_b, pico_b
+        
+    except ValueError:
+        print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        return None, None, None
+    except Exception as e:
+        print(f'Ocorreu esse erro: {e}')
+        return None, None, None
+
+    finally: # Roda esse trecho, independente do que for
+        tracemalloc.stop()
+
+def imprimir_memoria(funcao, *args, **kwargs):
+    '''Função que imprime o gasto de memória por processamento de funções e métodos em bytes ou megabytes'''
+    try:
+        
+            resultado, atual_b, pico_bb = registrar_memoria(funcao, *args, **kwargs)
+            print(f'O total de memória atual em bytes é {atual_b}B e o pico foi de {pico_b}B.')
+            print(f'O total de memória atual em megabytes é {(atual_b/(1024*1024))}B e o pico foi de {(pico_b/(1024*1024))}B.')
+            return resultado
+    
+    except ValueError:
+        print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        return None
+    except Exception as e:
+        print(f'Ocorreu esse erro: {e}')
+        return None
+
+def imprimir_desempenho(funcao, *args, **kwargs):
+    '''Função que imprime tempo e memória gastos em processamento'''
+    try:
+        tracemalloc.start()
+        tracemalloc.reset_peak()
+        
+        inicio = time.perf_counter()
+
+        # A função é executada apenas uma vez
+        resultado = funcao(*args, **kwargs)
+        
+        fim = time.perf_counter()
+        atual_b, pico_b = tracemalloc.get_traced_memory()
+        
+        tempo_total = fim - inicio
+        
+        print('- RELATÓRIO DE DESEMPENHO:\n')  
+        print('    1. Tempo:\n')
+        print(f"      Tempo de processamento: {tempo_total:.4f} segundos ou {(tempo_total/60):.2f} minutos.\n")
+        print('    2. Uso de Memória RAM:\n')
+        print(f"      Atual: {atual_b} Bytes ou {(atual_b)/(1024*1024):.2f} MegaBytes | Pico: {pico_b} Bytes ou {(pico_b)/(1024*1024):.2f} MegaBytes.\n\n")
+      
+        return resultado
+    
+    except ValueError:
+        print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        return None
+    except Exception as e:
+        print(f'Ocorreu esse erro: {e}')
+        return None
+
+    finally:
+        if tracemalloc.is_tracing():
+            tracemalloc.stop()
+    
+        

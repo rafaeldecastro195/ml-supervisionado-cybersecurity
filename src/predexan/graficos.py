@@ -203,13 +203,13 @@ def gerar_scatterplot(df, nome_col, largura=12, altura=4, x=None, y=None, tsne2d
         print(f'Ocorreu o seguinte erro: {e}')
         return None
 
-def gerar_regplot(df, nome_col, eixo_y, log=False, cor='#6C31F7'):
+def gerar_regplot(df, nome_col, eixo_y, regressao_logistica=False, ci=95, n_boot=80, cor='#6C31F7'):
     '''Essa função gera um scatterplot de regressão'''
     try:
-        grafico_regressao = sns.regplot(data=df, x=nome_col, y=eixo_y, logistic=log, color=cor)
+        grafico_regressao = sns.regplot(data=df, x=nome_col, y=eixo_y, logistic=regressao_logistica, ci=ci, n_boot=n_boot, color=cor)
         plt.gca().set(xlim=(df[nome_col].min(), df[nome_col].max()))
         
-        tipo = 'Logística' if log else 'Linear'
+        tipo = 'Logística' if regressao_logistica else 'Linear'
         plt.title(f'Scatterplot de Regressão {tipo}: {nome_col} e {eixo_y}')
         
         plt.show()
