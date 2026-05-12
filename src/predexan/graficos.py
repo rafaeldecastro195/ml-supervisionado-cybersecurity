@@ -227,3 +227,4 @@ def gerar_regplot(df, nome_col, eixo_y, regressao_logistica=False, ci=95, n_boot
     except Exception as e:
         print(f'Ocorreu o seguinte erro: {e}')
         return None
+

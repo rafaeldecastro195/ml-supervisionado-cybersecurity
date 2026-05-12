@@ -262,7 +262,7 @@ def calcular_percentual(var, total):
         return percentual
 
     except ValueError:
-        print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        print(f'Erro de valor. Confira a tipagem dos dados enviados.')
         return None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
@@ -312,7 +312,7 @@ def registrar_memoria(funcao, *arg, **kwarg):
         return resultado, atual_b, pico_b
         
     except ValueError:
-        print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        print(f'Erro de valor. Confira a tipagem dos dados enviados.')
         return None, None, None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
@@ -331,12 +331,13 @@ def imprimir_memoria(funcao, *args, **kwargs):
             return resultado
     
     except ValueError:
-        print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        print(f'Erro de valor. Confira a tipagem dos dados enviados.')
         return None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
         return None
 
+# Tentar colocar a opção de ver a data e o horário de quando foi rodada a célula, antes de sair o relatório de desempenho
 def imprimir_desempenho(funcao, *args, **kwargs):
     '''Função que imprime tempo e memória gastos em processamento'''
     try:
@@ -362,7 +363,7 @@ def imprimir_desempenho(funcao, *args, **kwargs):
         return resultado
     
     except ValueError:
-        print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        print(f'Erro de valor. Confira a tipagem dos dados enviados.')
         return None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
@@ -371,5 +372,4 @@ def imprimir_desempenho(funcao, *args, **kwargs):
     finally:
         if tracemalloc.is_tracing():
             tracemalloc.stop()
-    
         
