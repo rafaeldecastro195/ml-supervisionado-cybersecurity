@@ -50,15 +50,21 @@ def gerar_kde(df, nome_col, cor_kde='#6D0EEB', legenda=False, xy_kde=True):
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
 
-def determinar_limite_x(df, nome_col):
-    '''Função que determina o limite do Eixo X de um histograma, baseado nos Limites Superior e Inferior e IQR'''
+def determinar_limite_x(df, nome_col, minimo=None, maximo=None, iqr=False):
+    '''Função que determina o limite do Eixo X de um histograma, baseado nos valores passados ou Limites Superior e Inferior e IQR'''
     try:
-        q1 = df[nome_col].quantile(0.25)
-        q3 = df[nome_col].quantile(0.75)
-        iqr = q3 - q1
-        minimo = q1 - (1.5 * iqr)
-        maximo = q3 + (1.5 * iqr)
-        
+        if iqr:
+            q1 = df[nome_col].quantile(0.25)
+            q3 = df[nome_col].quantile(0.75)
+            limite_iqr = q3 - q1
+            minimo = q1 - (1.5 * limite_iqr)
+            maximo = q3 + (1.5 * limite_iqr)
+            
+        if minimo is None:
+            minimo = df[nome_col].min()
+        if maximo is None:
+            maximo = df[nome_col].max()
+            
         return plt.xlim(minimo, maximo)
     
     except ValueError:
@@ -69,7 +75,27 @@ def determinar_limite_x(df, nome_col):
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
 
-def gerar_histograma(df, nome_col, largura=12, altura=4, legenda=False, curva_normal=False, kde=False, cor='#E6B75C', stat='density', largura_linha=2, limite_x=False):
+def determinar_limite_y(df, nome_col, minimo=None, maximo=None):
+    '''Função que determina o limite do Eixo X de um histograma, baseado nos valores passados'''
+    try:
+        limite_atual_inferior, limite_atual_superior = plt.ylim()
+        
+        if minimo is None:
+            minimo = limite_atual_inferior
+        if maximo is None:
+            maximo = limite_atual_superior
+                
+        return plt.ylim(minimo, maximo)
+        
+    except ValueError:
+        print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+    except KeyError:
+        print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        return None
+    except Exception as e:
+        print(f'Ocorreu esse erro: {e}')
+
+def gerar_histograma(df, nome_col, largura=12, altura=4, legenda=False, curva_normal=False, kde=False, cor='#E6B75C', stat='density', largura_linha=2, limite_x=False, minx=None, maxx=None, iqr=False, limite_y=False, miny=None, maxy=None):
     '''Função que gera histograma com a possibilidade de gerar Curva de Distribuição Normal e KDE sobrepostos'''
     try:
         # Determina o tamanho da figura
@@ -87,7 +113,10 @@ def gerar_histograma(df, nome_col, largura=12, altura=4, legenda=False, curva_no
             plt.legend(loc='upper right')
 
         if limite_x:
-            determinar_limite_x(df, nome_col)
+            determinar_limite_x(df, nome_col, minx, maxx, iqr)
+
+        if limite_y:
+            determinar_limite_y(df, nome_col, miny, maxy)
             
         plt.title(f'Distribuição do atributo {nome_col}, usando a estatística de {stat}')
         plt.xlabel(nome_col)
@@ -227,3 +256,4 @@ def gerar_regplot(df, nome_col, eixo_y, regressao_logistica=False, ci=95, n_boot
     except Exception as e:
         print(f'Ocorreu o seguinte erro: {e}')
         return None
+
