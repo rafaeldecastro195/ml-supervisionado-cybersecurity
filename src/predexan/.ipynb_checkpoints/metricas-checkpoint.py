@@ -1,7 +1,10 @@
 import pandas as pd
 import numpy as np
+import datetime
 import time
 import tracemalloc
+import psutil
+from sklearn.metrics import precision_recall_curve
 
 def gerar_analise_basica(df, nome_col):
     '''Essa função gera valores de Análise Básica de um ou mais atributos'''
@@ -337,12 +340,20 @@ def imprimir_memoria(funcao, *args, **kwargs):
         print(f'Ocorreu esse erro: {e}')
         return None
 
-# Tentar colocar a opção de ver a data e o horário de quando foi rodada a célula, antes de sair o relatório de desempenho
 def imprimir_desempenho(funcao, *args, **kwargs):
     '''Função que imprime tempo e memória gastos em processamento'''
     try:
+        # Captura data/hora exata do início da execução
+        agora_inicio = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        
+
         tracemalloc.start()
         tracemalloc.reset_peak()
+
+        # Chamada inicial para resetar o contador interno de CPU do psutil
+        psutil.cpu_percent(interval=None) 
+        processo = psutil.Process()
+        ram_inicio = processo.memory_info().rss
         
         inicio = time.perf_counter()
 
@@ -350,16 +361,36 @@ def imprimir_desempenho(funcao, *args, **kwargs):
         resultado = funcao(*args, **kwargs)
         
         fim = time.perf_counter()
+        
+        # Captura estado final
         atual_b, pico_b = tracemalloc.get_traced_memory()
         
-        tempo_total = fim - inicio
+        # Calcula a CPU gasta especificamente DURANTE a execução da função
+        cpu_medida = psutil.cpu_percent(interval=None)
+        ram_final = processo.memory_info().rss
         
-        print('- RELATÓRIO DE DESEMPENHO:\n')  
-        print('    1. Tempo:\n')
-        print(f"      Tempo de processamento: {tempo_total:.4f} segundos ou {(tempo_total/60):.2f} minutos.\n")
-        print('    2. Uso de Memória RAM:\n')
-        print(f"      Atual: {atual_b} Bytes ou {(atual_b)/(1024*1024):.2f} MegaBytes | Pico: {pico_b} Bytes ou {(pico_b)/(1024*1024):.2f} MegaBytes.\n\n")
-      
+        tempo_total = fim - inicio
+
+        agora_fim = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        
+        tracemalloc.stop()
+        
+        print('\n--- RELATÓRIO DE DESEMPENHO DE PROCESSAMENTO ---')  
+
+        print(f'\nExecução iniciada em: {agora_inicio}')
+        
+        print(f"\n1. TEMPO: {tempo_total:.4f}s ({(tempo_total/60):.2f} min)")
+        
+        print(f"\n2. MEMÓRIA RAM (Processo Atual):")
+        print(f"   - Pico de processamento: {pico_b/(1024**2):.2f} MB")
+        print(f"   - Diferença líquida de RAM no processo: {(ram_final - ram_inicio)/(1024**2):.2f} MB")
+        print(f"   - Total RAM alocada para o processo: {ram_final/(1024**2):.2f} MB")
+
+        print(f"\n3. CPU:")
+        print(f"   - Uso de CPU do sistema durante a execução: {cpu_medida}%")
+
+        print(f'\nExecução concluída em: {agora_fim}\n')
+        
         return resultado
     
     except ValueError:
@@ -372,4 +403,108 @@ def imprimir_desempenho(funcao, *args, **kwargs):
     finally:
         if tracemalloc.is_tracing():
             tracemalloc.stop()
+
+def extrair_prt(y_teste, y_pred_probabilistica):
+    '''Extrai os dados de precisão, revocação e limiares'''
+    try:
+        precision, recall, thresholds = precision_recall_curve(y_teste, y_predicao_probabilistica)
+
+        return precision, recall, thresholds
+
+    except ValueError:
+        print(f'Erro de valor. Confira a tipagem dos dados enviados.')
+        return None, None, None
+    except Exception as e:
+        print(f'Ocorreu esse erro: {e}')
+        return None, None, None
+
+import numpy as np
+from sklearn.metrics import precision_recall_curve
+
+def imprimir_prt(y_teste, y_pred_probabilistica, obj_recall=True, meta_recall=0.95, obj_precision=False, meta_precision=None, obj_f1=False, obj_f2=False):
+    '''Extrai os dados de precisão, revocação e limiares e define o melhor threshold'''
+    try:
+        precision, recall, thresholds = precision_recall_curve(y_teste, y_pred_probabilistica)
+        
+        # 1. OBJETIVO: RECALL (Segurança Máxima)
+        if obj_recall:    
+            if meta_recall is None:
+                raise ValueError("Para usar 'obj_recall=True', você deve definir uma 'meta_recall' (ex: 0.95).")
+                
+            indices_seguros = np.where(recall >= meta_recall)[0]
+            
+            if len(indices_seguros) == 0:
+                print(f"Não foi possível encontrar nenhum limiar que atinja a meta de {meta_recall*100}% de Recall.")
+            else:
+                melhor_indice = indices_seguros[-1]
+                limiar_seguranca = thresholds[melhor_indice]
+                precisao_resultante = precision[melhor_indice] 
+                recall_resultante = recall[melhor_indice]
+                
+                print(f"\n--- Objetivo focado em Recall (meta = {meta_recall*100}%) ---")
+                print(f"Limiar ideal a ser usado: {limiar_seguranca:.4f}")
+                print(f"Recall real obtido: {recall_resultante*100:.2f}% (Ataques detectados)")
+                print(f"Precision real obtida: {precisao_resultante*100:.2f}% (Acerto dos alertas disparados)")
+
+        # 2. OBJETIVO: PRECISION (Evitar Alertas Falsos)
+        if obj_precision:    
+            if meta_precision is None:
+                raise ValueError("Para usar 'obj_precision=True', você deve definir uma 'meta_precision' (ex: 0.80).")
+                           
+            indices_seguros = np.where(precision >= meta_precision)[0]
+            
+            if len(indices_seguros) == 0:
+                print(f"Não foi possível encontrar nenhum limiar que atinja a meta de {meta_precision*100}% de Precision.")
+            else:
+                melhor_indice = indices_seguros[0] 
+                limiar_seguranca = thresholds[melhor_indice]
+                precisao_resultante = precision[melhor_indice]
+                recall_resultante = recall[melhor_indice]
+                
+                print(f"\n - Objetivo focado em Precision (meta >= {meta_precision*100}%)")
+                print(f"Limiar ideal a ser usado: {limiar_seguranca:.4f}")
+                print(f"Recall real obtido: {recall_resultante*100:.2f}% (Ataques detectados)")
+                print(f"Precision real obtida: {precisao_resultante*100:.2f}% (Acerto dos alertas disparados)")
+
+        # 3. OBJETIVO: F1-SCORE TRADICIONAL (Equilíbrio Simétrico)
+        if obj_f1:
+            f1_scores = 2 * (precision * recall) / (precision + recall + 1e-10)
+            
+            if len(f1_scores) > len(thresholds):
+                f1_scores = f1_scores[:-1]
+                
+            indice_f1_max = np.argmax(f1_scores)
+            limiar_f1 = thresholds[indice_f1_max]
+            precisao_f1 = precision[indice_f1_max]
+            recall_f1 = recall[indice_f1_max]
+            
+            print(f"\n - Equilíbrio Simétrico (Max F1-Score)")
+            print(f"Limiar ideal: {limiar_f1:.4f}")
+            print(f"Recall neste ponto: {recall_f1*100:.2f}% (Ataques detectados)")
+            print(f"Precision neste ponto: {precisao_f1*100:.2f}% (Acerto dos alertas)")
+
+        # 4. OBJETIVO: F2-SCORE (Foco em Cybersecurity - Pesa mais o Recall)
+        if obj_f2:
+            beta = 2
+            f2_scores = (1 + beta**2) * (precision * recall) / ((beta**2 * precision) + recall + 1e-10)
+            
+            if len(f2_scores) > len(thresholds):
+                f2_scores = f2_scores[:-1]
+            
+            indice_f2_max = np.argmax(f2_scores)
+            limiar_f2 = thresholds[indice_f2_max]
+            precisao_f2 = precision[indice_f2_max]
+            recall_f2 = recall[indice_f2_max]
+            
+            print(f"\n - Equilíbrio Otimizado para Recall (Max F2-Score)")
+            print(f"Limiar ideal: {limiar_f2:.4f}")
+            print(f"Recall neste ponto: {recall_f2*100:.2f}% (Ataques detectados)")
+            print(f"Precision neste ponto: {precisao_f2*100:.2f}% (Acerto dos alertas)")
+
+    except ValueError as ve:
+        print(f'Erro de validação: {ve}')
+        return None
+    except Exception as e:
+        print(f'Ocorreu esse erro: {e}')
+        return None
         

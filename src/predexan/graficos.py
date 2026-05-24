@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import norm
 from sklearn.manifold import TSNE
+from sklearn.metrics import precision_recall_curve, RocCurveDisplay
 
 # Funções relativas à geração de gráficos de histograma, curva de distribuição normal e kde
 
@@ -255,5 +256,57 @@ def gerar_regplot(df, nome_col, eixo_y, regressao_logistica=False, ci=95, n_boot
 
     except Exception as e:
         print(f'Ocorreu o seguinte erro: {e}')
+        return None
+
+#============================================================================================================================================================================================================================================
+
+# Funções para geração Curva ROC-AUC e Curva Precision-Recall
+
+def gerar_curva_pr(y_teste, y_predicao_probabilistica, desbalanceamento=False):
+    '''Função que gera gráfico de precision-recall curve'''
+    try:   
+        precision, recall, thresholds = precision_recall_curve(y_teste, y_predicao_probabilistica)
+        
+        # Plota a curva do classificador principal
+        plt.plot(recall, precision, label='Classificador')
+        
+        # Define a linha de base de acordo com o desbalanceamento
+        if desbalanceamento:
+            proporcao_positivos = sum(y_teste) / len(y_teste)
+            plt.axhline(y=proporcao_positivos, color='r', linestyle='--', label=f'Base Aleatória ({proporcao_positivos:.2f})')
+        else:
+            base_aleatoria = np.linspace(0, 1, len(precision))
+            plt.plot(base_aleatoria, base_aleatoria, linestyle='--', label='Base Aleatória', color='red')
+            
+        plt.xlabel('Recall')
+        plt.ylabel('Precision')
+        plt.title('Curva Precision-Recall')
+        plt.legend()
+        plt.show()
+        plt.close()
+
+    except ValueError as e:
+        print(f'Erro de valor. Confira a tipagem e o formato dos dados enviados. Detalhes: {e}')
+        return None
+        
+    except Exception as e:
+        print(f'Ocorreu o seguinte erro inesperado: {e}')
+        return None
+
+
+def gerar_roc_auc(modelo, X_teste, y_teste):
+    '''Função que gera gráfico de Curva ROC-AUC'''
+    try:   
+        curva = RocCurveDisplay.from_estimator(modelo, X_teste, y_teste)
+        plt.plot([0, 1], [0, 1], color='red', linestyle='--')
+        plt.show()
+        plt.close()
+
+    except ValueError as e:
+        print(f'Erro de valor. Confira a tipagem e o formato dos dados enviados. Detalhes: {e}')
+        return None
+        
+    except Exception as e:
+        print(f'Ocorreu o seguinte erro inesperado: {e}')
         return None
 
