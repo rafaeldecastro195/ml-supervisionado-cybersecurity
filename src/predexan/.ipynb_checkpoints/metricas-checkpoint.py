@@ -418,93 +418,219 @@ def extrair_prt(y_teste, y_pred_probabilistica):
         print(f'Ocorreu esse erro: {e}')
         return None, None, None
 
-import numpy as np
-from sklearn.metrics import precision_recall_curve
+# =====================================================================
+# 1. FUNÇÕES ESPECIALISTAS (Cálculo e extração silenciosa)
+# =====================================================================
 
-def imprimir_prt(y_teste, y_pred_probabilistica, obj_recall=True, meta_recall=0.95, obj_precision=False, meta_precision=None, obj_f1=False, obj_f2=False):
-    '''Extrai os dados de precisão, revocação e limiares e define o melhor threshold'''
+def extrair_recall(y_teste, y_pred, meta_recall):
+    '''Função que extrai os valores de Recall'''
     try:
-        precision, recall, thresholds = precision_recall_curve(y_teste, y_pred_probabilistica)
-        
-        # 1. OBJETIVO: RECALL (Segurança Máxima)
-        if obj_recall:    
-            if meta_recall is None:
-                raise ValueError("Para usar 'obj_recall=True', você deve definir uma 'meta_recall' (ex: 0.95).")
-                
-            indices_seguros = np.where(recall >= meta_recall)[0]
-            
-            if len(indices_seguros) == 0:
-                print(f"Não foi possível encontrar nenhum limiar que atinja a meta de {meta_recall*100}% de Recall.")
-            else:
-                melhor_indice = indices_seguros[-1]
-                limiar_seguranca = thresholds[melhor_indice]
-                precisao_resultante = precision[melhor_indice] 
-                recall_resultante = recall[melhor_indice]
-                
-                print(f"\n--- Objetivo focado em Recall (meta = {meta_recall*100}%) ---")
-                print(f"Limiar ideal a ser usado: {limiar_seguranca:.4f}")
-                print(f"Recall real obtido: {recall_resultante*100:.2f}% (Ataques detectados)")
-                print(f"Precision real obtida: {precisao_resultante*100:.2f}% (Acerto dos alertas disparados)")
+        if meta_recall is None:
+            raise ValueError("Para usar 'obj_recall=True', você deve definir uma 'meta_recall' (ex: 0.95).")
 
-        # 2. OBJETIVO: PRECISION (Evitar Alertas Falsos)
-        if obj_precision:    
-            if meta_precision is None:
-                raise ValueError("Para usar 'obj_precision=True', você deve definir uma 'meta_precision' (ex: 0.80).")
+        precision, recall, thresholds = precision_recall_curve(y_teste, y_pred)
+        indices_seguros = np.where(recall >= meta_recall)[0]
+            
+        if len(indices_seguros) == 0:
+            print(f"Não foi possível encontrar nenhum limiar que atinja a meta de {meta_recall*100}% de Recall.")
+            return None, None, None
+        else:
+            melhor_indice = indices_seguros[-1]
+            if melhor_indice >= len(thresholds):
+                melhor_indice = len(thresholds) - 1
+                
+            limiar_seguranca = thresholds[melhor_indice]
+            # CORREÇÃO: Buscando do array precision em vez do thresholds
+            precision_resultante = precision[melhor_indice]
+            recall_resultante = recall[melhor_indice]
+
+            return melhor_indice, limiar_seguranca, recall_resultante
+    except Exception as e:
+        print(f'Ocorreu esse erro no Recall: {e}')
+        return None, None, None
+
+def extrair_precision(y_teste, y_pred, meta_precision):
+    '''Função que extrai os valores de Precision'''
+    try:
+        if meta_precision is None:
+            raise ValueError("Para usar 'obj_precision=True', você deve definir uma 'meta_precision' (ex: 0.80).")
+            
+        precision, _, thresholds = precision_recall_curve(y_teste, y_pred)
+        indices_seguros = np.where(precision >= meta_precision)[0]
+            
+        if len(indices_seguros) == 0:
+            print(f"Não foi possível encontrar nenhum limiar que atinja a meta de {meta_precision*100}% de Precision.")
+            return None, None, None
+        else:
+            melhor_indice = indices_seguros[0]
+            if melhor_indice >= len(thresholds):
+                melhor_indice = len(thresholds) - 1
+                
+            limiar_seguranca = thresholds[melhor_indice]
+            precision_resultante = precision[melhor_indice]
+
+            return melhor_indice, limiar_seguranca, precision_resultante
+    except Exception as e:
+        print(f'Ocorreu esse erro na Precision: {e}')
+        return None, None, None
+
+def extrair_f1(y_teste, y_pred):
+    '''Função que extrai os valores de F1-Score'''
+    try:
+        precision, recall, thresholds = precision_recall_curve(y_teste, y_pred)
+        precision, recall = precision[:-1], recall[:-1] # Sincroniza tamanhos com o thresholds
                            
-            indices_seguros = np.where(precision >= meta_precision)[0]
-            
-            if len(indices_seguros) == 0:
-                print(f"Não foi possível encontrar nenhum limiar que atinja a meta de {meta_precision*100}% de Precision.")
-            else:
-                melhor_indice = indices_seguros[0] 
-                limiar_seguranca = thresholds[melhor_indice]
-                precisao_resultante = precision[melhor_indice]
-                recall_resultante = recall[melhor_indice]
-                
+        f1_scores = 2 * (precision * recall) / (precision + recall + 1e-10)
+        indice_f1_max = np.argmax(f1_scores)
+
+        return indice_f1_max, thresholds[indice_f1_max], f1_scores[indice_f1_max]
+    except Exception as e:
+        print(f'Ocorreu esse erro no F1: {e}')
+        return None, None, None
+
+def extrair_f2(y_teste, y_pred):
+    '''Função que extrai os valores de F2-Score'''
+    try:
+        precision, recall, thresholds = precision_recall_curve(y_teste, y_pred)
+        precision, recall = precision[:-1], recall[:-1]
+        
+        beta = 2
+        f2_scores = (1 + beta**2) * (precision * recall) / ((beta**2 * precision) + recall + 1e-10)
+        indice_f2_max = np.argmax(f2_scores)
+
+        return indice_f2_max, thresholds[indice_f2_max], f2_scores[indice_f2_max]
+    except Exception as e:
+        print(f'Ocorreu esse erro no F2: {e}')
+        return None, None, None
+
+
+# =====================================================================
+# 2. FUNÇÃO COORDENADORA (Apenas para Impressão e Relatórios)
+# =====================================================================
+
+def imprimir_prt(y_teste, y_pred, obj_recall=True, meta_recall=0.95, obj_precision=False, meta_precision=None, obj_f1=False, obj_f2=False):
+    '''Consome os dados das funções especialistas e monta o relatório visual na tela'''
+    try:
+        precision_base, recall_base, _ = precision_recall_curve(y_teste, y_pred)
+
+        # 1. OBJETIVO: RECALL
+        if obj_recall:    
+            melhor_indice, limiar, recall_res = extrair_recall(y_teste, y_pred, meta_recall)
+            if limiar is not None:
+                print(f"\n - Objetivo focado em Recall (meta = {meta_recall*100}%)")
+                print(f"Limiar ideal a ser usado: {limiar:.4f}")
+                print(f"Recall real obtido: {recall_res*100:.2f}% (Ataques detectados)")
+                print(f"Precision real obtida: {precision_base[melhor_indice]*100:.2f}% (Acerto dos alertas disparados)")
+
+        # 2. OBJETIVO: PRECISION
+        if obj_precision:    
+            melhor_indice, limiar, precision_res = extrair_precision(y_teste, y_pred, meta_precision)
+            if limiar is not None:
                 print(f"\n - Objetivo focado em Precision (meta >= {meta_precision*100}%)")
-                print(f"Limiar ideal a ser usado: {limiar_seguranca:.4f}")
-                print(f"Recall real obtido: {recall_resultante*100:.2f}% (Ataques detectados)")
-                print(f"Precision real obtida: {precisao_resultante*100:.2f}% (Acerto dos alertas disparados)")
+                print(f"Limiar ideal a ser usado: {limiar:.4f}")
+                print(f"Recall real obtido: {recall_base[melhor_indice]*100:.2f}% (Ataques detectados)")
+                print(f"Precision real obtida: {precision_res*100:.2f}% (Acerto dos alertas disparados)")
 
-        # 3. OBJETIVO: F1-SCORE TRADICIONAL (Equilíbrio Simétrico)
+        # 3. OBJETIVO: F1-SCORE TRADICIONAL
         if obj_f1:
-            f1_scores = 2 * (precision * recall) / (precision + recall + 1e-10)
-            
-            if len(f1_scores) > len(thresholds):
-                f1_scores = f1_scores[:-1]
-                
-            indice_f1_max = np.argmax(f1_scores)
-            limiar_f1 = thresholds[indice_f1_max]
-            precisao_f1 = precision[indice_f1_max]
-            recall_f1 = recall[indice_f1_max]
-            
-            print(f"\n - Equilíbrio Simétrico (Max F1-Score)")
-            print(f"Limiar ideal: {limiar_f1:.4f}")
-            print(f"Recall neste ponto: {recall_f1*100:.2f}% (Ataques detectados)")
-            print(f"Precision neste ponto: {precisao_f1*100:.2f}% (Acerto dos alertas)")
+            melhor_indice, limiar, _ = extrair_f1(y_teste, y_pred)
+            if limiar is not None:
+                print(f"\n - Equilíbrio Simétrico (Max F1-Score)")
+                print(f"Limiar ideal: {limiar:.4f}")
+                print(f"Recall neste ponto: {recall_base[melhor_indice]*100:.2f}% (Ataques detectados)")
+                print(f"Precision neste ponto: {precision_base[melhor_indice]*100:.2f}% (Acerto dos alertas)")
 
-        # 4. OBJETIVO: F2-SCORE (Foco em Cybersecurity - Pesa mais o Recall)
+        # 4. OBJETIVO: F2-SCORE
         if obj_f2:
-            beta = 2
-            f2_scores = (1 + beta**2) * (precision * recall) / ((beta**2 * precision) + recall + 1e-10)
-            
-            if len(f2_scores) > len(thresholds):
-                f2_scores = f2_scores[:-1]
-            
-            indice_f2_max = np.argmax(f2_scores)
-            limiar_f2 = thresholds[indice_f2_max]
-            precisao_f2 = precision[indice_f2_max]
-            recall_f2 = recall[indice_f2_max]
-            
-            print(f"\n - Equilíbrio Otimizado para Recall (Max F2-Score)")
-            print(f"Limiar ideal: {limiar_f2:.4f}")
-            print(f"Recall neste ponto: {recall_f2*100:.2f}% (Ataques detectados)")
-            print(f"Precision neste ponto: {precisao_f2*100:.2f}% (Acerto dos alertas)")
+            melhor_indice, limiar, _ = extrair_f2(y_teste, y_pred)
+            if limiar is not None:
+                print(f"\n - Equilíbrio Otimizado para Recall (Max F2-Score)")
+                print(f"Limiar ideal: {limiar:.4f}")
+                print(f"Recall neste ponto: {recall_base[melhor_indice]*100:.2f}% (Ataques detectados)")
+                print(f"Precision neste ponto: {precision_base[melhor_indice]*100:.2f}% (Acerto dos alertas)")
 
-    except ValueError as ve:
-        print(f'Erro de validação: {ve}')
+    except Exception as e:
+        print(f'Erro ao formatar a impressão dos relatórios: {e}')
+        
+def extracao_desempenho_modelo(matriz_confusao):
+    '''Função que extrai valores de desempenho do modelo, a partir da Matriz de Confusão'''
+    try:
+        (tn, fp), (fn, tp) = matriz_confusao
+        total = (tn+fn+tp+fp)
+        
+
+        accuracy = (tp + tn) / total if total > 0 else 0
+        precision = tp / (tp + fp) if (tp + fp) > 0 else 0
+        recall = tp / (tp + fn) if (tp + fn) > 0 else 0
+        f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
+
+        return {
+            'total_amostras': total,
+            'tn': tn,
+            'fn': fn,
+            'tp': tp,
+            'fp': fp,
+            "accuracy": round(accuracy, 4),
+            "precision": round(precision, 4),
+            "recall": round(recall, 4),
+            "f1_score": round(f1_score, 4)
+        }
+
+    except ValueError:
+        print("Erro de validação: Certifique-se de que a matriz é estritamente 2x2.")
+        return None
+    except TypeError:
+        print("Erro de tipo: A entrada precisa ser uma matriz (lista de listas ou array numpy).")
         return None
     except Exception as e:
-        print(f'Ocorreu esse erro: {e}')
+        print(f"Ocorreu esse erro: {e}")
         return None
+
+def imprimir_desempenho_modelo(matriz_confusao):
+    '''Função que imprime as métricas de desempenho do modelo'''
+    try:
+        metricas = extracao_desempenho_modelo(matriz_confusao)
+
+        if metricas is None:
+            return None
+
+        tn = metricas['tn']
+        tp = metricas['tp']
+        fn = metricas['fn']
+        fp = metricas['fp']
+        total = metricas['total_amostras']
+
+        precision = metricas['precision']
+        recall = metricas['recall']
+        acuracia = metricas['accuracy']
+        f1_score = metricas['f1_score']
         
+        print(f'O total de predições de teste foi {total}.')
+
+        
+        
+        print(f'\n - Verdadeiro Negativo (TN): Predição correta sobre o classificação negativa. Há {tn} casos que o modelo apontou como resultado negativo, corretamente. Representa {calcular_percentual(tn, total):.2f}% do total de predições de teste.')
+        print(f'\n - Falso Negativo (FN): Predição incorreta sobre o classificação negativa. Há {fn} casos em que o modelo apontou como resultado negativo, erroneamente. Maior risco pois, possivelmente, o usuário não buscará ajuda para o caso de ataque cibernético, por acreditar não ser necessário. Representa {calcular_percentual(fn, total):.2f}% do total de predições de teste.')
+        print(f'\n - Verdadeiro Positivo (TP): Predição correta sobre o classificação positiva. Há {tp} casos em que o modelo apontou como resultado positivo, corretamente. Representa {calcular_percentual(tp, total):.2f}% do total de predições de teste.')
+        print(f'\n - Falso Positivo (FP): Predição incorreta sobre o classificação positiva. Há {fp} casos em que o modelo apontou como resultado positivo, erroneamente. Este é o alarme falso. Representa {calcular_percentual(fp, total):.2f}% do total de predições de teste.')
+
+        print(f'\n\nResultados:')
+        
+        print(f'\n - A Acurácia total do modelo se dá por: (tp + tn) / total. Seu valor é {acuracia}.')
+        print(f'\n - A Precisão do modelo se dá por: tp / (tp + fp). Seu valor é {precision}.')
+        print(f'\n - A Revocação (recall) do modelo se dá por: tp / (tp + fn) . Seu valor é {recall}.')
+        print(f'\n - O F1 Score do modelo se dá por: 2 * (precision * recall) / (precision + recall). Seu valor é {f1_score}.')
+        
+        
+        print(f'\n - A quantidade de vezes que o modelo acertou é expressa por TN + TP e é igual a {(tn + tp)}, de um total de {total}. Isto corresponde a, aproximadamente, {calcular_percentual((tn+tp), total):.2f}% do total de predições.')
+        print(f'\n - A quantidade de vezes que o modelo errou é expressa por FN + FP e é igual a {(fn + fp)}, de um total de {total}. Isto corresponde a, aproximadamente, {calcular_percentual((fn+fp), total):.2f}% do total de predições.\n\n')
+
+    except ValueError:
+        print("Erro de validação: Certifique-se de que a matriz é estritamente 2x2.")
+        return None
+    except TypeError:
+        print("Erro de tipo: A entrada precisa ser uma matriz (lista de listas ou array numpy).")
+        return None
+    except Exception as e:
+        print(f"Ocorreu esse erro: {e}")
+        return None
