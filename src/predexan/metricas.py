@@ -375,21 +375,21 @@ def imprimir_desempenho(funcao, *args, **kwargs):
         
         tracemalloc.stop()
         
-        print('\n--- RELATÓRIO DE DESEMPENHO DE PROCESSAMENTO ---')  
+        print('\nRELATÓRIO DE DESEMPENHO DE PROCESSAMENTO:')  
 
-        print(f'\nExecução iniciada em: {agora_inicio}')
+        print(f'\n  Execução iniciada em: {agora_inicio}')
         
-        print(f"\n1. TEMPO: {tempo_total:.4f}s ({(tempo_total/60):.2f} min)")
+        print(f"\n    1. TEMPO: {tempo_total:.4f}s ({(tempo_total/60):.2f} min)")
         
-        print(f"\n2. MEMÓRIA RAM (Processo Atual):")
-        print(f"   - Pico de processamento: {pico_b/(1024**2):.2f} MB")
-        print(f"   - Diferença líquida de RAM no processo: {(ram_final - ram_inicio)/(1024**2):.2f} MB")
-        print(f"   - Total RAM alocada para o processo: {ram_final/(1024**2):.2f} MB")
+        print(f"\n    2. MEMÓRIA RAM (Processo Atual):")
+        print(f"        - Pico de processamento: {pico_b/(1024**2):.2f} MB")
+        print(f"        - Diferença líquida de RAM no processo: {(ram_final - ram_inicio)/(1024**2):.2f} MB")
+        print(f"        - Total RAM alocada para o processo: {ram_final/(1024**2):.2f} MB")
 
-        print(f"\n3. CPU:")
-        print(f"   - Uso de CPU do sistema durante a execução: {cpu_medida}%")
+        print(f"\n    3. CPU:")
+        print(f"        - Uso de CPU do sistema durante a execução: {cpu_medida}%")
 
-        print(f'\nExecução concluída em: {agora_fim}\n')
+        print(f'\n  Execução concluída em: {agora_fim}\n')
         
         return resultado
     
@@ -418,9 +418,7 @@ def extrair_prt(y_teste, y_pred_probabilistica):
         print(f'Ocorreu esse erro: {e}')
         return None, None, None
 
-# =====================================================================
-# 1. FUNÇÕES ESPECIALISTAS (Cálculo e extração silenciosa)
-# =====================================================================
+
 
 def extrair_recall(y_teste, y_pred, meta_recall):
     '''Função que extrai os valores de Recall'''
@@ -440,7 +438,6 @@ def extrair_recall(y_teste, y_pred, meta_recall):
                 melhor_indice = len(thresholds) - 1
                 
             limiar_seguranca = thresholds[melhor_indice]
-            # CORREÇÃO: Buscando do array precision em vez do thresholds
             precision_resultante = precision[melhor_indice]
             recall_resultante = recall[melhor_indice]
 
@@ -504,10 +501,6 @@ def extrair_f2(y_teste, y_pred):
         return None, None, None
 
 
-# =====================================================================
-# 2. FUNÇÃO COORDENADORA (Apenas para Impressão e Relatórios)
-# =====================================================================
-
 def imprimir_prt(y_teste, y_pred, obj_recall=True, meta_recall=0.95, obj_precision=False, meta_precision=None, obj_f1=False, obj_f2=False):
     '''Consome os dados das funções especialistas e monta o relatório visual na tela'''
     try:
@@ -518,51 +511,63 @@ def imprimir_prt(y_teste, y_pred, obj_recall=True, meta_recall=0.95, obj_precisi
             melhor_indice, limiar, recall_res = extrair_recall(y_teste, y_pred, meta_recall)
             if limiar is not None:
                 print(f"\n - Objetivo focado em Recall (meta = {meta_recall*100}%)")
-                print(f"Limiar ideal a ser usado: {limiar:.4f}")
-                print(f"Recall real obtido: {recall_res*100:.2f}% (Ataques detectados)")
-                print(f"Precision real obtida: {precision_base[melhor_indice]*100:.2f}% (Acerto dos alertas disparados)")
+                print(f"      Limiar ideal a ser usado: {limiar:.4f}")
+                print(f"      Recall real obtido: {recall_res*100:.2f}% (Ataques detectados)")
+                print(f"      Precision real obtida: {precision_base[melhor_indice]*100:.2f}% (Acerto dos alertas disparados)")
 
         # 2. OBJETIVO: PRECISION
         if obj_precision:    
             melhor_indice, limiar, precision_res = extrair_precision(y_teste, y_pred, meta_precision)
             if limiar is not None:
                 print(f"\n - Objetivo focado em Precision (meta >= {meta_precision*100}%)")
-                print(f"Limiar ideal a ser usado: {limiar:.4f}")
-                print(f"Recall real obtido: {recall_base[melhor_indice]*100:.2f}% (Ataques detectados)")
-                print(f"Precision real obtida: {precision_res*100:.2f}% (Acerto dos alertas disparados)")
+                print(f"      Limiar ideal a ser usado: {limiar:.4f}")
+                print(f"      Recall real obtido: {recall_base[melhor_indice]*100:.2f}% (Ataques detectados)")
+                print(f"      Precision real obtida: {precision_res*100:.2f}% (Acerto dos alertas disparados)")
 
         # 3. OBJETIVO: F1-SCORE TRADICIONAL
         if obj_f1:
             melhor_indice, limiar, _ = extrair_f1(y_teste, y_pred)
             if limiar is not None:
                 print(f"\n - Equilíbrio Simétrico (Max F1-Score)")
-                print(f"Limiar ideal: {limiar:.4f}")
-                print(f"Recall neste ponto: {recall_base[melhor_indice]*100:.2f}% (Ataques detectados)")
-                print(f"Precision neste ponto: {precision_base[melhor_indice]*100:.2f}% (Acerto dos alertas)")
+                print(f"      Limiar ideal: {limiar:.4f}")
+                print(f"      Recall neste ponto: {recall_base[melhor_indice]*100:.2f}% (Ataques detectados)")
+                print(f"      Precision neste ponto: {precision_base[melhor_indice]*100:.2f}% (Acerto dos alertas)")
 
         # 4. OBJETIVO: F2-SCORE
         if obj_f2:
             melhor_indice, limiar, _ = extrair_f2(y_teste, y_pred)
             if limiar is not None:
                 print(f"\n - Equilíbrio Otimizado para Recall (Max F2-Score)")
-                print(f"Limiar ideal: {limiar:.4f}")
-                print(f"Recall neste ponto: {recall_base[melhor_indice]*100:.2f}% (Ataques detectados)")
-                print(f"Precision neste ponto: {precision_base[melhor_indice]*100:.2f}% (Acerto dos alertas)")
+                print(f"      Limiar ideal: {limiar:.4f}")
+                print(f"      Recall neste ponto: {recall_base[melhor_indice]*100:.2f}% (Ataques detectados)")
+                print(f"      Precision neste ponto: {precision_base[melhor_indice]*100:.2f}% (Acerto dos alertas)")
 
     except Exception as e:
         print(f'Erro ao formatar a impressão dos relatórios: {e}')
         
 def extracao_desempenho_modelo(matriz_confusao):
-    '''Função que extrai valores de desempenho do modelo, a partir da Matriz de Confusão de 1'''
+    '''Função que extrai valores de desempenho do modelo para as classes 0 e 1, a partir da Matriz de Confusão'''
     try:
         (tn, fp), (fn, tp) = matriz_confusao
-        total = (tn+fn+tp+fp)
-        
+        total = (tn + fn + tp + fp)
 
-        accuracy = (tp + tn) / total if total > 0 else 0
-        precision = tp / (tp + fp) if (tp + fp) > 0 else 0
-        recall = tp / (tp + fn) if (tp + fn) > 0 else 0
-        f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
+        if total == 0:
+            return {
+                'total_amostras': 0, 'tn': tn, 'fn': fn, 'tp': tp, 'fp': fp,
+                'accuracy': 0,
+                'classe_1': {'precision': 0, 'recall': 0, 'f1_score': 0},
+                'classe_0': {'precision': 0, 'recall': 0, 'f1_score': 0}
+            }
+
+        accuracy = (tp + tn) / total
+
+        precision_1 = tp / (tp + fp) if (tp + fp) > 0 else 0
+        recall_1 = tp / (tp + fn) if (tp + fn) > 0 else 0
+        f1_1 = 2 * (precision_1 * recall_1) / (precision_1 + recall_1) if (precision_1 + recall_1) > 0 else 0
+
+        precision_0 = tn / (tn + fn) if (tn + fn) > 0 else 0
+        recall_0 = tn / (tn + fp) if (tn + fp) > 0 else 0
+        f1_0 = 2 * (precision_0 * recall_0) / (precision_0 + recall_0) if (precision_0 + recall_0) > 0 else 0
 
         return {
             'total_amostras': total,
@@ -570,10 +575,17 @@ def extracao_desempenho_modelo(matriz_confusao):
             'fn': fn,
             'tp': tp,
             'fp': fp,
-            "accuracy": round(accuracy, 4),
-            "precision": round(precision, 4),
-            "recall": round(recall, 4),
-            "f1_score": round(f1_score, 4)
+            'accuracy': round(accuracy, 4),
+            'classe_1': {
+                'precision': round(precision_1, 4),
+                'recall': round(recall_1, 4),
+                'f1_score': round(f1_1, 4)
+            },
+            'classe_0': {
+                'precision': round(precision_0, 4),
+                'recall': round(recall_0, 4),
+                'f1_score': round(f1_0, 4)
+            }
         }
 
     except ValueError:
@@ -587,7 +599,7 @@ def extracao_desempenho_modelo(matriz_confusao):
         return None
 
 def imprimir_desempenho_modelo(matriz_confusao):
-    '''Função que imprime as métricas de desempenho do modelo de 1'''
+    '''Função que imprime as métricas de desempenho do modelo para as classes 0 e 1'''
     try:
         metricas = extracao_desempenho_modelo(matriz_confusao)
 
@@ -598,32 +610,43 @@ def imprimir_desempenho_modelo(matriz_confusao):
         tp = metricas['tp']
         fn = metricas['fn']
         fp = metricas['fp']
-        total = metricas['total_amostras']
+        
+        total = metricas.get('total_amostras', tn + tp + fn + fp) 
 
-        precision = metricas['precision']
-        recall = metricas['recall']
         acuracia = metricas['accuracy']
-        f1_score = metricas['f1_score']
         
-        print(f'O total de predições de teste foi {total}.')
+        
+        precision_1 = metricas['classe_1']['precision']
+        recall_1 = metricas['classe_1']['recall']
+        f1_score_1 = metricas['classe_1']['f1_score']
+        
+        precision_0 = metricas['classe_0']['precision']
+        recall_0 = metricas['classe_0']['recall']
+        f1_score_0 = metricas['classe_0']['f1_score']
+        
+        print(f'O total de predições de teste foi {total}.\n')
+        print(f'\n -> Classe 0:')
+        print(f'    - Verdadeiro Negativo (TN): há {tn} casos, o que representa, aproximadamente, {calcular_percentual(tn, total):.2f}% do total de predições de teste.')
+        print(f'    - Falso Negativo (FN): há {fn} casos, o que representa, aproximadamente, {calcular_percentual(fn, total):.2f}% do total de predições de teste.')
+        print(f'\n -> Classe 1:')
+        print(f'   - Verdadeiro Positivo (TP): há {tp} casos, o que representa, aproximadamente, {calcular_percentual(tp, total):.2f}% do total de predições de teste.')
+        print(f'   - Falso Positivo (FP): há {fp} casos, o que representa, aproximadamente, {calcular_percentual(fp, total):.2f}% do total de predições de teste.')
 
-        
-        
-        print(f'\n - Verdadeiro Negativo (TN): Predição correta sobre o classificação negativa. Há {tn} casos que o modelo apontou como resultado negativo, corretamente. Representa {calcular_percentual(tn, total):.2f}% do total de predições de teste.')
-        print(f'\n - Falso Negativo (FN): Predição incorreta sobre o classificação negativa. Há {fn} casos em que o modelo apontou como resultado negativo, erroneamente. Maior risco pois, possivelmente, o usuário não buscará ajuda para o caso de ataque cibernético, por acreditar não ser necessário. Representa {calcular_percentual(fn, total):.2f}% do total de predições de teste.')
-        print(f'\n - Verdadeiro Positivo (TP): Predição correta sobre o classificação positiva. Há {tp} casos em que o modelo apontou como resultado positivo, corretamente. Representa {calcular_percentual(tp, total):.2f}% do total de predições de teste.')
-        print(f'\n - Falso Positivo (FP): Predição incorreta sobre o classificação positiva. Há {fp} casos em que o modelo apontou como resultado positivo, erroneamente. Este é o alarme falso. Representa {calcular_percentual(fp, total):.2f}% do total de predições de teste.')
+        print(f'\n\n -> Resultados Gerais:')
+        print(f'    - A Acurácia total do modelo se dá por: (tp + tn) / total. Seu valor é {acuracia:.4f}.')
+        print(f'    - A quantidade de vezes que o modelo acertou é expressa por TN + TP e é igual a {(tn + tp)}, de um total de {total}. Corresponde a, aproximadamente, {calcular_percentual((tn+tp), total):.2f}% das predições.')
+        print(f'    - A quantidade de vezes que o modelo errou é expressa por FN + FP e é igual a {(fn + fp)}, de um total de {total}. Corresponde a, aproximadamente, {calcular_percentual((fn+fp), total):.2f}% das predições.')
 
-        print(f'\n\nResultados:')
-        
-        print(f'\n - A Acurácia total do modelo se dá por: (tp + tn) / total. Seu valor é {acuracia}.')
-        print(f'\n - A Precisão do modelo se dá por: tp / (tp + fp). Seu valor é {precision}.')
-        print(f'\n - A Revocação (recall) do modelo se dá por: tp / (tp + fn) . Seu valor é {recall}.')
-        print(f'\n - O F1 Score do modelo se dá por: 2 * (precision * recall) / (precision + recall). Seu valor é {f1_score}.')
-        
-        
-        print(f'\n - A quantidade de vezes que o modelo acertou é expressa por TN + TP e é igual a {(tn + tp)}, de um total de {total}. Isto corresponde a, aproximadamente, {calcular_percentual((tn+tp), total):.2f}% do total de predições.')
-        print(f'\n - A quantidade de vezes que o modelo errou é expressa por FN + FP e é igual a {(fn + fp)}, de um total de {total}. Isto corresponde a, aproximadamente, {calcular_percentual((fn+fp), total):.2f}% do total de predições.\n\n')
+        print(f'\n\n -> Métricas por Classe:')
+        print(f'\n     Classe 0:')
+        print(f'        - O valor da Precision é {precision_0:.4f}.')
+        print(f'        - O valor do Recall é {recall_0:.4f}.')
+        print(f'        - O valor do F1-Score é {f1_score_0:.4f}.')
+
+        print(f'\n     Classe 1:')
+        print(f'        - O valor da Precisão é {precision_1:.4f}.')
+        print(f'        - O valor do Recall é {recall_1:.4f}.')
+        print(f'        - O valor do F1-Score é {f1_score_1:.4f}.\n\n')
 
     except ValueError:
         print("Erro de validação: Certifique-se de que a matriz é estritamente 2x2.")
