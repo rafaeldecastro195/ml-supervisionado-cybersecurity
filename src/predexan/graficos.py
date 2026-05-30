@@ -310,3 +310,22 @@ def gerar_roc_auc(modelo, X_teste, y_teste):
         print(f'Ocorreu o seguinte erro inesperado: {e}')
         return None
 
+def gerar_curva_aprendizado(modelo):
+    '''Função que gera curva de aprendizado'''
+    try:
+        if hasattr(modelo, 'loss_curve_'):
+            plt.figure(figsize=(8, 5))
+            plt.plot(modelo.loss_curve_)
+            plt.title('Curva de Aprendizado')
+            plt.xlabel('Iterações')
+            plt.ylabel('Erro (Loss)')
+            plt.grid(True, linestyle='--', alpha=0.6) # Linhas de grade
+            plt.show()
+            plt.close()
+        else:
+            # Mensagem amigável caso seja passado o XGBoost, Stacking ou outro modelo que não possui o atributo
+            print(f"O modelo {type(modelo).__name__} não possui o atributo 'loss_curve_'.")
+            return None
+    except Exception as e:
+        print(f'Ocorreu esse erro: {e}')
+        return None
