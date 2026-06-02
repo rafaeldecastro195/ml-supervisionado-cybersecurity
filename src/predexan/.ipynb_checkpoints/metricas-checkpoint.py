@@ -4,6 +4,7 @@ import datetime
 import time
 import tracemalloc
 import psutil
+import traceback
 from sklearn.metrics import precision_recall_curve
 
 def gerar_analise_basica(df, nome_col):
@@ -19,12 +20,15 @@ def gerar_analise_basica(df, nome_col):
     
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
         return None, None, None, None, None
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None, None, None, None, None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
         return None, None, None, None, None
         
 def imprimir_analise_basica(df, nome_col):
@@ -37,12 +41,15 @@ def imprimir_analise_basica(df, nome_col):
 
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
         return None
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
         return None
 
 def gerar_tendencia_central(df, nome_col):
@@ -56,12 +63,15 @@ def gerar_tendencia_central(df, nome_col):
     
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
         return None, None, None
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None, None, None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
         return None, None, None
         
 def imprimir_tendencia_central(df, nome_col):
@@ -76,12 +86,15 @@ def imprimir_tendencia_central(df, nome_col):
 
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
         return None
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
         return None
 
 def gerar_dispersao(df, nome_col):
@@ -98,12 +111,15 @@ def gerar_dispersao(df, nome_col):
 
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
         return None, None, None, None, None, None
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None, None, None, None, None, None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
         return None, None, None, None, None, None
         
 def imprimir_dispersao(df, nome_col):
@@ -123,11 +139,16 @@ def imprimir_dispersao(df, nome_col):
 
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
+        return None
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
+        return None
 
 def gerar_quartis(df, nome_col):
     '''Função que gera valores de  Medidas de Dispersão e Amplitude de um ou mais atributos'''
@@ -140,12 +161,15 @@ def gerar_quartis(df, nome_col):
         
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
         return None, None, None
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None, None, None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
         return None, None, None
         
 def imprimir_quartis(df, nome_col):
@@ -160,11 +184,16 @@ def imprimir_quartis(df, nome_col):
 
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
+        return None
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
+        return None
 
 def gerar_valor_outliers(df, nome_col):
     '''Função que gera valores de análises de Outliers de um ou mais atributos'''
@@ -183,12 +212,15 @@ def gerar_valor_outliers(df, nome_col):
      
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
         return None, None, None, None, None, None, None, None, None
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None, None, None, None, None, None, None, None, None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
         return None, None, None, None, None, None, None, None, None
     
 def imprimir_outliers(df, nome_col):
@@ -204,11 +236,16 @@ def imprimir_outliers(df, nome_col):
 
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
+        return None
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
+        return None 
 
 def gerar_regra_ouro_normal(df, nome_col):
     '''Função que determina os valores da regra de ouro da Distribuição Normal de um ou mais atributos'''
@@ -230,12 +267,15 @@ def gerar_regra_ouro_normal(df, nome_col):
     
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
         return None, None, None, None, None, None, None, None
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None, None, None, None, None, None, None, None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
         return None, None, None, None, None, None, None, None
         
 def imprimir_regra_ouro_normal(df, nome_col):
@@ -266,9 +306,11 @@ def calcular_percentual(var, total):
 
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados.')
+        traceback.print_exc()
         return None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
         return None
 
 def medir_tempo(funcao, *args, **kwargs):
@@ -281,6 +323,7 @@ def medir_tempo(funcao, *args, **kwargs):
         return (fim - comeco), resultado
     except Exception as e:
         print(f"Erro na medição: {e}")
+        traceback.print_exc()
         return None, None
 
 def imprimir_tempo(funcao, *args, **kwargs):
@@ -297,6 +340,7 @@ def imprimir_tempo(funcao, *args, **kwargs):
         return resultado
     except Exception as e:
         print(f"Erro na impressão: {e}")
+        traceback.print_exc()
         return None
 
 def registrar_memoria(funcao, *arg, **kwarg):
@@ -316,9 +360,11 @@ def registrar_memoria(funcao, *arg, **kwarg):
         
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados.')
+        traceback.print_exc()
         return None, None, None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
         return None, None, None
 
     finally: # Roda esse trecho, independente do que for
@@ -335,9 +381,11 @@ def imprimir_memoria(funcao, *args, **kwargs):
     
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados.')
+        traceback.print_exc()
         return None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
         return None
 
 def imprimir_desempenho(funcao, *args, **kwargs):
@@ -395,9 +443,11 @@ def imprimir_desempenho(funcao, *args, **kwargs):
     
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados.')
+        traceback.print_exc()
         return None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
         return None
 
     finally:
@@ -413,9 +463,11 @@ def extrair_prt(y_teste, y_pred_probabilistica):
 
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados.')
+        traceback.print_exc()
         return None, None, None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
         return None, None, None
 
 
@@ -444,6 +496,7 @@ def extrair_recall(y_teste, y_pred, meta_recall):
             return melhor_indice, limiar_seguranca, recall_resultante
     except Exception as e:
         print(f'Ocorreu esse erro no Recall: {e}')
+        traceback.print_exc()
         return None, None, None
 
 def extrair_precision(y_teste, y_pred, meta_precision):
@@ -469,6 +522,7 @@ def extrair_precision(y_teste, y_pred, meta_precision):
             return melhor_indice, limiar_seguranca, precision_resultante
     except Exception as e:
         print(f'Ocorreu esse erro na Precision: {e}')
+        traceback.print_exc()
         return None, None, None
 
 def extrair_f1(y_teste, y_pred):
@@ -483,6 +537,7 @@ def extrair_f1(y_teste, y_pred):
         return indice_f1_max, thresholds[indice_f1_max], f1_scores[indice_f1_max]
     except Exception as e:
         print(f'Ocorreu esse erro no F1: {e}')
+        traceback.print_exc()
         return None, None, None
 
 def extrair_f2(y_teste, y_pred):
@@ -496,8 +551,10 @@ def extrair_f2(y_teste, y_pred):
         indice_f2_max = np.argmax(f2_scores)
 
         return indice_f2_max, thresholds[indice_f2_max], f2_scores[indice_f2_max]
+        
     except Exception as e:
         print(f'Ocorreu esse erro no F2: {e}')
+        traceback.print_exc()
         return None, None, None
 
 
@@ -543,7 +600,9 @@ def imprimir_prt(y_teste, y_pred, obj_recall=True, meta_recall=0.95, obj_precisi
                 print(f"      Precision neste ponto: {precision_base[melhor_indice]*100:.2f}% (Acerto dos alertas)")
 
     except Exception as e:
+        traceback.print_exc()
         print(f'Erro ao formatar a impressão dos relatórios: {e}')
+        return None
         
 def extracao_desempenho_modelo(matriz_confusao):
     '''Função que extrai valores de desempenho do modelo para as classes 0 e 1, a partir da Matriz de Confusão'''
@@ -590,12 +649,15 @@ def extracao_desempenho_modelo(matriz_confusao):
 
     except ValueError:
         print("Erro de validação: Certifique-se de que a matriz é estritamente 2x2.")
+        traceback.print_exc()
         return None
     except TypeError:
         print("Erro de tipo: A entrada precisa ser uma matriz (lista de listas ou array numpy).")
+        traceback.print_exc()
         return None
     except Exception as e:
         print(f"Ocorreu esse erro: {e}")
+        traceback.print_exc()
         return None
 
 def imprimir_desempenho_modelo(matriz_confusao):
@@ -650,10 +712,13 @@ def imprimir_desempenho_modelo(matriz_confusao):
 
     except ValueError:
         print("Erro de validação: Certifique-se de que a matriz é estritamente 2x2.")
+        traceback.print_exc()
         return None
     except TypeError:
         print("Erro de tipo: A entrada precisa ser uma matriz (lista de listas ou array numpy).")
+        traceback.print_exc()
         return None
     except Exception as e:
         print(f"Ocorreu esse erro: {e}")
+        traceback.print_exc()
         return None

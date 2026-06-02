@@ -1,3 +1,4 @@
+import traceback
 # Função para facilitar a exclusão de outliers
 
 def drop_outlier(df, nome_col, outlier_inferior, outlier_superior):
@@ -11,14 +12,17 @@ def drop_outlier(df, nome_col, outlier_inferior, outlier_superior):
 
     except ValueError:
             print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+            traceback.print_exc()
             return None
             
     except KeyError:
             print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+            traceback.print_exc()
             return None
     
     except Exception as e:
             print(f'Ocorreu o seguinte erro: {e}')
+            traceback.print_exc()
             return None
     
 # Função que normaliza os dados, baseada em escalonamento robusto
@@ -45,10 +49,13 @@ def normalizar_feature(df, nome_col, escalonador, transformar_apenas=False, div_
 
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
         return None
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
         return None

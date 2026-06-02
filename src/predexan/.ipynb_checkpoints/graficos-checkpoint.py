@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import traceback
 from scipy.stats import norm
 from sklearn.manifold import TSNE
 from sklearn.metrics import precision_recall_curve, RocCurveDisplay
@@ -26,11 +27,16 @@ def gerar_curva_normal(df, nome_col, cor_cn='k', xy_cn=False, legenda=False, lar
 
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
+        return None
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
+        return None
 
 def gerar_kde(df, nome_col, cor_kde='#6D0EEB', legenda=False, xy_kde=True):
     '''Função que gera KDE (Estimativa de Densidade de Kernel)'''
@@ -45,11 +51,15 @@ def gerar_kde(df, nome_col, cor_kde='#6D0EEB', legenda=False, xy_kde=True):
 
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
+        return None
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
         return None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
+        return None
 
 def determinar_limite_x(df, nome_col, minimo=None, maximo=None, iqr=False):
     '''Função que determina o limite do Eixo X de um histograma, baseado nos valores passados ou Limites Superior e Inferior e IQR'''
@@ -70,11 +80,16 @@ def determinar_limite_x(df, nome_col, minimo=None, maximo=None, iqr=False):
     
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
+        return None
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
+        return None
 
 def determinar_limite_y(df, nome_col, minimo=None, maximo=None):
     '''Função que determina o limite do Eixo X de um histograma, baseado nos valores passados'''
@@ -90,11 +105,16 @@ def determinar_limite_y(df, nome_col, minimo=None, maximo=None):
         
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
+        return None
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
+        return None
 
 def gerar_histograma(df, nome_col, largura=12, altura=4, legenda=False, curva_normal=False, kde=False, cor='#E6B75C', stat='density', largura_linha=2, limite_x=False, minx=None, maxx=None, iqr=False, limite_y=False, miny=None, maxy=None):
     '''Função que gera histograma com a possibilidade de gerar Curva de Distribuição Normal e KDE sobrepostos'''
@@ -128,11 +148,16 @@ def gerar_histograma(df, nome_col, largura=12, altura=4, legenda=False, curva_no
 
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
+        return None
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
+        return None
 
 #============================================================================================================================================================================================================================================
 
@@ -184,14 +209,17 @@ def gerar_tsne_2d(df, nome_col, num_componentes=2, taxa_aprendizado='auto', inic
         
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
         return None, None
         
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None, None
 
     except Exception as e:
         print(f'Ocorreu o seguinte erro: {e}')
+        traceback.print_exc()
         return None, None
 
     
@@ -223,14 +251,17 @@ def gerar_scatterplot(df, nome_col, largura=12, altura=4, x=None, y=None, tsne2d
 
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
         return None
         
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None
 
     except Exception as e:
         print(f'Ocorreu o seguinte erro: {e}')
+        traceback.print_exc()
         return None
 
 def gerar_regplot(df, nome_col, eixo_y, regressao_logistica=False, ci=95, n_boot=80, cor='#6C31F7'):
@@ -248,14 +279,17 @@ def gerar_regplot(df, nome_col, eixo_y, regressao_logistica=False, ci=95, n_boot
     
     except ValueError:
         print(f'Erro de valor. Confira a tipagem dos dados enviados. Os dados do atributo {nome_col} são {df[nome_col].dtype}')
+        traceback.print_exc()
         return None
         
     except KeyError:
         print(f'A coluna {nome_col} não foi encontrada. Favor digitar uma coluna válida.')
+        traceback.print_exc()
         return None
 
     except Exception as e:
         print(f'Ocorreu o seguinte erro: {e}')
+        traceback.print_exc()
         return None
 
 #============================================================================================================================================================================================================================================
@@ -287,10 +321,12 @@ def gerar_curva_pr(y_teste, y_predicao_probabilistica, desbalanceamento=False):
 
     except ValueError as e:
         print(f'Erro de valor. Confira a tipagem e o formato dos dados enviados. Detalhes: {e}')
+        traceback.print_exc()
         return None
         
     except Exception as e:
         print(f'Ocorreu o seguinte erro inesperado: {e}')
+        traceback.print_exc()
         return None
 
 
@@ -304,10 +340,12 @@ def gerar_roc_auc(modelo, X_teste, y_teste):
 
     except ValueError as e:
         print(f'Erro de valor. Confira a tipagem e o formato dos dados enviados. Detalhes: {e}')
+        traceback.print_exc()
         return None
         
     except Exception as e:
         print(f'Ocorreu o seguinte erro inesperado: {e}')
+        traceback.print_exc()
         return None
 
 def gerar_curva_aprendizado(modelo):
@@ -328,4 +366,5 @@ def gerar_curva_aprendizado(modelo):
             return None
     except Exception as e:
         print(f'Ocorreu esse erro: {e}')
+        traceback.print_exc()
         return None
