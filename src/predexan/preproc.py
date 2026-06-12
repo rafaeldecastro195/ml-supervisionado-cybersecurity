@@ -30,11 +30,15 @@ def drop_outlier(df, nome_col, outlier_inferior, outlier_superior):
 def normalizar_feature(df, nome_col, escalonador, transformar_apenas=False, div_max=False, achatamento=False):
     '''Função genérica para normalizar features aceitando qualquer escalonador do Scikit-Learn'''
     try:
+        colunas = [nome_col] if isinstance(nome_col, str) else nome_col
+        
+        dados_selecionados = df[colunas]
+        
         if not transformar_apenas:
-            col_escalonada = escalonador.fit_transform(df[[nome_col]])
+            col_escalonada = escalonador.fit_transform(dados_selecionados)
 
         if transformar_apenas:
-            col_escalonada = escalonador.transform(df[[nome_col]])
+            col_escalonada = escalonador.transform(dados_selecionados)
 
         if div_max:
             max_escalonado = col_escalonada.max()
