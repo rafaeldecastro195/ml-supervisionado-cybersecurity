@@ -34,7 +34,7 @@ Este projeto propõe o desenvolvimento de um sistema de detecção de ameaças c
 ## Instruções de utilização
 
 Acesso em Produção (quando disponível)
-* URL: https://<seu-dominio>/...
+* URL: **Aplicacao publicada:** https://huggingface.co/spaces/vitoriasoares/deteccao-ameacas-ciberneticas
 * Status: online/homologação
 
 # Código
