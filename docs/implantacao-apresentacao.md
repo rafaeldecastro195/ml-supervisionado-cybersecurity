@@ -1,15 +1,15 @@
-# Etapa 5 — Implantacao da Solucao
+# Etapa 5 — Implantação da Solução
 
-## 1. Visao Geral
+## 1. Visão Geral
 
 Esta etapa descreve o processo de implantacao do sistema de deteccao de ameacas ciberneticas em ambiente de computacao em nuvem. A solucao realiza **inferencia dinamica** sobre os modelos treinados nas etapas anteriores: o usuario fornece os dados de uma conexao de rede por meio de uma interface web, e o sistema retorna a classificacao em tempo de execucao — sem nenhum reprocessamento ou retreinamento.
 
-**Modelo em producao:** Stacking Ensemble com MLP de tres camadas ocultas (`stacking_3c.pkl`)  
-**Interface:** Streamlit  
-**Provedor de nuvem:** Hugging Face Spaces  
-**Threshold de classificacao:** 0.7453 (otimizado para F1, acuracia de 89,73%)  
-**Aplicacao publicada:** https://huggingface.co/spaces/vitoriasoares/deteccao-ameacas-ciberneticas
-**Relatório do desenvolvimento do projeto:** https://docs.google.com/document/d/1ni0YwOBFEJzJ2LEP2fw3aMofTzHM7MeyWrmDk_6yb4o/edit?tab=t.0
+- **Modelo em producao:** Stacking Ensemble com MLP de tres camadas ocultas (`stacking_3c.pkl`)  
+- **Interface:** Streamlit  
+- **Provedor de nuvem:** Hugging Face Spaces  
+- **Threshold de classificacao:** 0.7453 (otimizado para F1, acuracia de 89,73%)  
+- **Aplicacao publicada:** https://huggingface.co/spaces/vitoriasoares/deteccao-ameacas-ciberneticas
+- **Relatório do desenvolvimento do projeto:** https://docs.google.com/document/d/1ni0YwOBFEJzJ2LEP2fw3aMofTzHM7MeyWrmDk_6yb4o/edit?tab=t.0
 
 ---
 
