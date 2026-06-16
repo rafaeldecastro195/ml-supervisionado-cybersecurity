@@ -13,24 +13,24 @@ Esta etapa descreve o processo de implantacao do sistema de deteccao de ameacas 
 
 ---
 
-## 2. Avaliacao dos Provedores de Nuvem
+## 2. Avaliação dos Provedores de Nuvem
 
 Para selecionar o ambiente de deploy, foram avaliados quatro provedores com base nos criterios relevantes para um prototipo academico de inferencia com ML.
 
-### 2.1 Criterios de Avaliacao
+### 2.1 Critérios de Avaliação
 
-| Criterio | Peso | Descricao |
+| Critério | Peso | Descrição |
 |---|---|---|
-| Custo para prototipo | Alto | Viabilidade financeira para um projeto academico sem patrocinio |
-| Tempo de configuracao | Alto | Horas necessarias ate o primeiro deploy funcional |
-| Suporte nativo a Streamlit | Medio | Capacidade de servir apps Streamlit sem container manual |
-| Recursos de compute | Medio | CPU e RAM disponiveis no tier gratuito |
+| Custo para protótipo | Alto | Viabilidade financeira para um projeto acadêmico sem patrocínio |
+| Tempo de configuração | Alto | Horas necessárias atá o primeiro deploy funcional |
+| Suporte nativo a Streamlit | Médio | Capacidade de servir apps Streamlit sem container manual |
+| Recursos de compute | Médio | CPU e RAM disponiveis no tier gratuito |
 | Escalabilidade futura | Baixo | Possibilidade de crescimento para uso real |
 | Curva de aprendizado | Alto | Requisito de conhecimento previo em cloud |
 
 ### 2.2 Comparativo
 
-| Criterio | AWS SageMaker | Azure ML | GCP Vertex AI | **HF Spaces** |
+| Critério | AWS SageMaker | Azure ML | GCP Vertex AI | **HF Spaces** |
 |---|---|---|---|---|
 | Custo (prototipo) | ~US$50+/mes | ~US$50+/mes | ~US$50+/mes | **Gratuito** |
 | Tempo de configuracao | 2–5 dias | 2–5 dias | 2–5 dias | **< 1 hora** |
@@ -38,70 +38,70 @@ Para selecionar o ambiente de deploy, foram avaliados quatro provedores com base
 | Compute gratuito | Limitado/pago | Limitado/pago | Limitado/pago | **2 vCPU, 16 GB RAM** |
 | Escalabilidade | Alta | Alta | Alta | Limitada |
 | Curva de aprendizado | Alta | Alta | Alta | **Baixa** |
-| Cartao de credito | Obrigatorio | Obrigatorio | Obrigatorio | **Nao necessario** |
+| Cartão de credito | Obrigatório | Obrigatório | Obrigatório | **Não necessário** |
 
-### 2.3 Analise por Provedor
+### 2.3 Análise por Provedor
 
 **AWS SageMaker**  
-Oferece endpoints gerenciados de ML com alta disponibilidade e integracao com o ecossistema AWS (S3, Lambda, CloudWatch). Para um prototipo academico, porem, a configuracao exige criacao de roles IAM, VPCs, buckets S3 e configuracao de endpoints — processo que consome varios dias e requer conhecimento avancado de cloud. O custo de uma instancia ml.t3.medium para servir o modelo seria de aproximadamente US$0,05/hora, acumulando custos mesmo sem uso.
+Oferece endpoints gerenciados de ML com alta disponibilidade e integração com o ecossistema AWS (S3, Lambda, CloudWatch). Para um protótipo acadêmico, porém, a configuração exige criação de roles IAM, VPCs, buckets S3 e configuraçãoo de endpoints — processo que consome vários dias e requer conhecimento avançado de cloud. O custo de uma instância ml.t3.medium para servir o modelo seria de aproximadamente US$0,05/hora, acumulando custos mesmo sem uso.
 
 **Azure Machine Learning**  
-Similar ao AWS em complexidade. O Azure ML oferece pipelines gerenciados e integracao com Azure DevOps, mas exige configuracao de workspace, registro de modelos no Azure Container Registry e autenticacao via Azure Active Directory. Adequado para organizacoes com infraestrutura Azure existente, nao para projetos academicos pontuais.
+Similar ao AWS em complexidade. O Azure ML oferece pipelines gerenciados e integração com Azure DevOps, mas exige configuração de workspace, registro de modelos no Azure Container Registry e autenticação via Azure Active Directory. Adequado para organizações com infraestrutura Azure existente, não para projetos acadêmicos pontuais.
 
 **Google Cloud Vertex AI**  
-Plataforma robusta com suporte a Scikit-Learn e XGBoost nativos via endpoints gerenciados. O modelo Stacking seria servido como um Custom Prediction Routine. A curva de aprendizado e semelhante a AWS e Azure, com custos de instancia a partir de US$0,046/hora para n1-standard-2.
+Plataforma robusta com suporte a Scikit-Learn e XGBoost nativos via endpoints gerenciados. O modelo Stacking seria servido como um Custom Prediction Routine. A curva de aprendizado e semelhante a AWS e Azure, com custos de instância a partir de US$0,046/hora para n1-standard-2.
 
 **Hugging Face Spaces**  
-Plataforma de hospedagem de aplicacoes ML que oferece suporte nativo ao Streamlit SDK. O deploy e feito via push em um repositorio git gerenciado pela plataforma. O tier gratuito disponibiliza 2 vCPUs e 16 GB de RAM, sem necessidade de cartao de credito. Ideal para prototipos academicos e demos publicas.
+Plataforma de hospedagem de aplicações ML que oferece suporte nativo ao Streamlit SDK. O deploy e feito via push em um repositório git gerenciado pela plataforma. O tier gratuito disponibiliza 2 vCPUs e 16 GB de RAM, sem necessidade de cartão de credito. Ideal para protótipos acadêmicos e demos publicas.
 
 ---
 
 ## 3. Justificativa da Escolha: Hugging Face Spaces
 
-A escolha do Hugging Face Spaces como provedor de deploy foi fundamentada em tres eixos:
+A escolha do Hugging Face Spaces como provedor de deploy foi fundamentada em três eixos:
 
-### 3.1 Adequacao ao Escopo
+### 3.1 Adequação ao Escopo
 
-O sistema de deteccao de ameacas ciberneticas desenvolvido e um **prototipo academico de demonstracao**. O objetivo da Etapa 5 e demonstrar que o modelo treinado consegue realizar inferencia dinamica em producao — nao construir infraestrutura de producao corporativa. Para esse proposito, o HF Spaces e a escolha mais direta e eficiente.
+O sistema de detecção de ameacas cibernéticas desenvolvido e um **protótipo acadêmico de demonstração**. O objetivo da Etapa 5 e demonstrar que o modelo treinado consegue realizar inferência dinâmica em produção — não construir infraestrutura de produção corporativa. Para esse propósito, o HF Spaces e a escolha mais direta e eficiente.
 
-### 3.2 Custo-Beneficio
+### 3.2 Custo-Benefício
 
 O tier gratuito do HF Spaces oferece:
-- **2 vCPUs** — suficientes para servir multiplas predicoes simultaneas (ver Secao 5)
-- **16 GB de RAM** — capacidade muito superior ao necessario (modelo + escaladores + dados de referencia: < 500 MB)
+- **2 vCPUs** — suficientes para servir múltiplas predições simultâneas (ver Seção 5)
+- **16 GB de RAM** — capacidade muito superior ao necessário (modelo + escaladores + dados de referência: < 500 MB)
 - **Disponibilidade 24/7** sem custo
-- **Sem cobranca** por requisicao ou tempo de execucao
+- **Sem cobranca** por requisição ou tempo de execução
 
-Qualquer provedor cloud tradicional (AWS, Azure, GCP) geraria custo minimo de US$30–60/mes para servico equivalente.
+Qualquer provedor cloud tradicional (AWS, Azure, GCP) geraria custo mínimo de US$30–60/mes para servico equivalente.
 
-### 3.3 Tempo de Entrega e Reproducibilidade
+### 3.3 Tempo de Entrega e Reprodutibilidade
 
 O deploy no HF Spaces e realizado em menos de uma hora:
 1. Criar o Space (interface web, 2 minutos)
 2. Executar `preparar_deploy.py` para copiar os artefatos (< 1 minuto)
-3. Fazer push do conteudo de `hf_space/` para o repositorio do Space (< 5 minutos)
+3. Fazer push do conteudo de `hf_space/` para o repositório do Space (< 5 minutos)
 4. O HF Spaces constroi e sobe o container automaticamente (< 5 minutos)
 
 Toda a equipe consegue replicar o processo sem conta em provedor cloud, sem configuracao de IAM/VPC e sem conhecimento previo de DevOps.
 
 ---
 
-## 4. Estrutura de Implantacao
+## 4. Estrutura de Implantação
 
 ### 4.1 Arquivos do Deploy
 
-A pasta `src/hf_space/` contem todos os arquivos necessarios para o deploy:
+A pasta `src/hf_space/` contém todos os arquivos necessarios para o deploy:
 
 ```
 hf_space/
 ├── Dockerfile                    <- Define a imagem Docker; roda Streamlit na porta 7860
 ├── README.md                     <- Frontmatter lido pelo HF Spaces (sdk: docker, app_port: 7860)
 ├── app.py                        <- Ponto de entrada do Streamlit (raiz do Space)
-├── requirements.txt              <- Dependencias com versoes fixadas
+├── requirements.txt              <- Dependências com versões fixadas
 ├── predexan/
 │   ├── __init__.py
 │   ├── deploy.py                 <- Classe Feature para processamento de entrada
-│   └── preproc.py                <- Funcao de normalizacao
+│   └── preproc.py                <- Funcão de normalizacao
 ├── modelos/
 │   └── stacking_3c.pkl           <- Copiado por preparar_deploy.py
 ├── escalonadores/
@@ -111,9 +111,9 @@ hf_space/
     └── treino_pp_sem_normalizacao.parquet  <- Copiado por preparar_deploy.py
 ```
 
-O `Dockerfile` usa `python:3.12-slim` como imagem base, cria um usuario nao-root com uid 1000 (exigido pelo HF Spaces), instala as dependencias em uma camada separada do codigo-fonte para aproveitar o cache de build, e inicializa o Streamlit com `--server.port=7860 --server.address=0.0.0.0`. Ao receber o push, o HF Spaces constroi a imagem automaticamente e sobe o container.
+O `Dockerfile` usa `python:3.12-slim` como imagem base, cria um usuário nao-root com uid 1000 (exigido pelo HF Spaces), instala as dependências em uma camada separada do codigo-fonte para aproveitar o cache de build, e inicializa o Streamlit com `--server.port=7860 --server.address=0.0.0.0`. Ao receber o push, o HF Spaces constrói a imagem automaticamente e sobe o container.
 
-### 4.2 Dependencias
+### 4.2 Dependências
 
 ```
 streamlit>=1.31.0
@@ -126,9 +126,9 @@ pyarrow==23.0.1
 scipy==1.17.1
 ```
 
-As versoes de `scikit-learn` e `xgboost` foram fixadas nas mesmas versoes usadas no treinamento para garantir compatibilidade com os arquivos `.pkl` gerados pelo `joblib`. Divergencia de versao nessas bibliotecas pode causar falha no `joblib.load()`.
+As versões de `scikit-learn` e `xgboost` foram fixadas nas mesmas versões usadas no treinamento para garantir compatibilidade com os arquivos `.pkl` gerados pelo `joblib`. Divergência de versão nessas bibliotecas pode causar falha no `joblib.load()`.
 
-### 4.3 Pipeline de Inferencia Dinamica
+### 4.3 Pipeline de Inferência Dinâmica
 
 O `app.py` implementa o seguinte fluxo em tempo de execucao:
 
@@ -136,7 +136,7 @@ O `app.py` implementa o seguinte fluxo em tempo de execucao:
 Entrada do usuario (formulario Streamlit)
         |
         v
-Dados numericos continuos (21 features)  -->  RobustScaler.transform()  -->  DataFrame normalizado
+Dados numericos contínuos (21 features)  -->  RobustScaler.transform()  -->  DataFrame normalizado
 Dados numericos limitados (10 features)  -->  MinMaxScaler.transform()  -->  DataFrame normalizado
 Selecoes categoricas (3 dropdowns)       -->  One-hot encoding manual   -->  DataFrame binario
         |
