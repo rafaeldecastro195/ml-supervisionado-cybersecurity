@@ -10,6 +10,7 @@ Esta etapa descreve o processo de implantacao do sistema de deteccao de ameacas 
 - **Threshold de classificacao:** 0.7453 (otimizado para F1, acuracia de 89,73%)  
 - **Aplicacao publicada:** https://huggingface.co/spaces/vitoriasoares/deteccao-ameacas-ciberneticas
 - **Relatório do desenvolvimento do projeto:** https://docs.google.com/document/d/1ni0YwOBFEJzJ2LEP2fw3aMofTzHM7MeyWrmDk_6yb4o/edit?tab=t.0
+- **Vídeo do Pitch:** https://www.youtube.com/watch?v=vt2vxInyO6c
 
 ---
 
